@@ -3,24 +3,40 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		3E9F153726E5129600AD65B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F153626E5129600AD65B7 /* AppDelegate.swift */; };
-		3E9F153B26E5129600AD65B7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F153A26E5129600AD65B7 /* MainViewController.swift */; };
 		3E9F154026E5129A00AD65B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E9F153F26E5129A00AD65B7 /* Assets.xcassets */; };
 		3E9F154326E5129A00AD65B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E9F154126E5129A00AD65B7 /* LaunchScreen.storyboard */; };
+		3E9F155226E51FBD00AD65B7 /* MainParserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F154B26E51FBC00AD65B7 /* MainParserPresenter.swift */; };
+		3E9F155326E51FBD00AD65B7 /* MainParserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F154C26E51FBC00AD65B7 /* MainParserWorker.swift */; };
+		3E9F155426E51FBD00AD65B7 /* MainParserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F154D26E51FBC00AD65B7 /* MainParserRouter.swift */; };
+		3E9F155526E51FBD00AD65B7 /* MainParserModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F154E26E51FBC00AD65B7 /* MainParserModels.swift */; };
+		3E9F155626E51FBD00AD65B7 /* MainParserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F154F26E51FBC00AD65B7 /* MainParserViewController.swift */; };
+		3E9F155726E51FBD00AD65B7 /* MainParserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155026E51FBC00AD65B7 /* MainParserInteractor.swift */; };
+		3E9F155B26E5229900AD65B7 /* ParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155A26E5229900AD65B7 /* ParsingService.swift */; };
+		3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */; };
+		3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155E26E526CB00AD65B7 /* NetworkService.swift */; };
 		70E2E7B3AD6FD7A2B15E2F9F /* Pods_Parser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8075500C8E5514B9D0CF63DC /* Pods_Parser.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3E9F153326E5129600AD65B7 /* Parser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Parser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E9F153626E5129600AD65B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3E9F153A26E5129600AD65B7 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		3E9F153F26E5129A00AD65B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E9F154226E5129A00AD65B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3E9F154426E5129A00AD65B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3E9F154B26E51FBC00AD65B7 /* MainParserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainParserPresenter.swift; sourceTree = "<group>"; };
+		3E9F154C26E51FBC00AD65B7 /* MainParserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainParserWorker.swift; sourceTree = "<group>"; };
+		3E9F154D26E51FBC00AD65B7 /* MainParserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainParserRouter.swift; sourceTree = "<group>"; };
+		3E9F154E26E51FBC00AD65B7 /* MainParserModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainParserModels.swift; sourceTree = "<group>"; };
+		3E9F154F26E51FBC00AD65B7 /* MainParserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainParserViewController.swift; sourceTree = "<group>"; };
+		3E9F155026E51FBC00AD65B7 /* MainParserInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainParserInteractor.swift; sourceTree = "<group>"; };
+		3E9F155A26E5229900AD65B7 /* ParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingService.swift; sourceTree = "<group>"; };
+		3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDataFecther.swift; sourceTree = "<group>"; };
+		3E9F155E26E526CB00AD65B7 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		53125F0E00B2F87A448F65F0 /* Pods-Parser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parser.release.xcconfig"; path = "Target Support Files/Pods-Parser/Pods-Parser.release.xcconfig"; sourceTree = "<group>"; };
 		8075500C8E5514B9D0CF63DC /* Pods_Parser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Parser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C3631FF0EED4120F3166C33 /* Pods-Parser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Parser.debug.xcconfig"; path = "Target Support Files/Pods-Parser/Pods-Parser.debug.xcconfig"; sourceTree = "<group>"; };
@@ -60,12 +76,36 @@
 			isa = PBXGroup;
 			children = (
 				3E9F153626E5129600AD65B7 /* AppDelegate.swift */,
-				3E9F153A26E5129600AD65B7 /* MainViewController.swift */,
+				3E9F154A26E51F4D00AD65B7 /* MainParserView */,
+				3E9F155926E5220800AD65B7 /* Network and Parsing Service */,
 				3E9F153F26E5129A00AD65B7 /* Assets.xcassets */,
 				3E9F154126E5129A00AD65B7 /* LaunchScreen.storyboard */,
 				3E9F154426E5129A00AD65B7 /* Info.plist */,
 			);
 			path = Parser;
+			sourceTree = "<group>";
+		};
+		3E9F154A26E51F4D00AD65B7 /* MainParserView */ = {
+			isa = PBXGroup;
+			children = (
+				3E9F154F26E51FBC00AD65B7 /* MainParserViewController.swift */,
+				3E9F155026E51FBC00AD65B7 /* MainParserInteractor.swift */,
+				3E9F154B26E51FBC00AD65B7 /* MainParserPresenter.swift */,
+				3E9F154D26E51FBC00AD65B7 /* MainParserRouter.swift */,
+				3E9F154C26E51FBC00AD65B7 /* MainParserWorker.swift */,
+				3E9F154E26E51FBC00AD65B7 /* MainParserModels.swift */,
+			);
+			path = MainParserView;
+			sourceTree = "<group>";
+		};
+		3E9F155926E5220800AD65B7 /* Network and Parsing Service */ = {
+			isa = PBXGroup;
+			children = (
+				3E9F155A26E5229900AD65B7 /* ParsingService.swift */,
+				3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */,
+				3E9F155E26E526CB00AD65B7 /* NetworkService.swift */,
+			);
+			path = "Network and Parsing Service";
 			sourceTree = "<group>";
 		};
 		A46C0561F8CAB1377B5EB422 /* Pods */ = {
@@ -74,7 +114,6 @@
 				8C3631FF0EED4120F3166C33 /* Pods-Parser.debug.xcconfig */,
 				53125F0E00B2F87A448F65F0 /* Pods-Parser.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -199,8 +238,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E9F153B26E5129600AD65B7 /* MainViewController.swift in Sources */,
+				3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */,
+				3E9F155226E51FBD00AD65B7 /* MainParserPresenter.swift in Sources */,
+				3E9F155326E51FBD00AD65B7 /* MainParserWorker.swift in Sources */,
+				3E9F155726E51FBD00AD65B7 /* MainParserInteractor.swift in Sources */,
+				3E9F155626E51FBD00AD65B7 /* MainParserViewController.swift in Sources */,
+				3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */,
+				3E9F155B26E5229900AD65B7 /* ParsingService.swift in Sources */,
+				3E9F155426E51FBD00AD65B7 /* MainParserRouter.swift in Sources */,
 				3E9F153726E5129600AD65B7 /* AppDelegate.swift in Sources */,
+				3E9F155526E51FBD00AD65B7 /* MainParserModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
