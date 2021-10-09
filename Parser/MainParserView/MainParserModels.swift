@@ -13,19 +13,23 @@ enum MainParser {
   enum Model {
     struct Request {
       enum RequestType {
-        case some
+        case getMangaList
+        case getNextMangaList
       }
     }
     struct Response {
       enum ResponseType {
-        case some
+        case presentMangaData(MangaData, Bool)
+        case presentFooterLoader
       }
     }
     struct ViewModel {
       enum ViewModelData {
-        case some
+          case displayMangaData([TitleModel])
+          case displayFooterLoaerd
+
       }
     }
   }
-  
 }
+

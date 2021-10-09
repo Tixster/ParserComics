@@ -14,9 +14,22 @@ protocol MainParserPresentationLogic {
 
 class MainParserPresenter: MainParserPresentationLogic {
   weak var viewController: MainParserDisplayLogic?
+    var mangaDataLists = [TitleModel]()
   
   func presentData(response: MainParser.Model.Response.ResponseType) {
-  
+    switch response {
+    case .presentMangaData(let mangaData, let isFirstPage):
+        if isFirstPage {
+            mangaDataLists.removeAll()
+        }
+        let _ = mangaData.titles.map { manga in
+            mangaDataLists.append(manga)
+        }
+        
+        viewController?.displayData(viewModel: .displayMangaData(mangaDataLists))
+    case .presentFooterLoader:
+        viewController?.displayData(viewModel: .displayFooterLoaerd)
+    }
   }
   
 }
