@@ -10,6 +10,7 @@ import UIKit
 
 protocol DataFetcher {
     func getHTML(response: @escaping (Result<Data, Error>) -> Void)
+    func getMangaList(url: URL, response: @escaping(Result<MangaData, Error>) -> Void)
 }
 
 struct NetworkDataFecther: DataFetcher {
@@ -35,5 +36,17 @@ struct NetworkDataFecther: DataFetcher {
         
         }
     }
+    
+    func getMangaList(url: URL, response: @escaping (Result<MangaData, Error>) -> Void) {
+        networking.requestMangaTitle(url: url) { result in
+            switch result {
+            case .failure(let error):
+                response(.failure(error))
+            case .success(let data):
+                response(.success(data))
+            }
+        }
+    }
+    
     
 }

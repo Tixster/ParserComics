@@ -14,13 +14,26 @@ protocol MainParserBusinessLogic {
 
 class MainParserInteractor: MainParserBusinessLogic {
 
-  var presenter: MainParserPresentationLogic?
-  var service: MainParserService?
+    var presenter: MainParserPresentationLogic?
+    var service: MainParserService?
   
   func makeRequest(request: MainParser.Model.Request.RequestType) {
     if service == nil {
       service = MainParserService()
     }
+    
+    switch request {
+    case .getMangaList:
+        service?.getMangaTitle(url:  URL(string: Constants.siteNewMangaPageURL)!) { [weak self] data in
+            self?.presenter?.presentData(response: .presentMangaData(data,true))
+        }
+    case .getNextMangaList:
+        presenter?.presentData(response: .presentFooterLoader)
+        service?.getNextPangeMangaTitles(completion: { mangaData in
+            self.presenter?.presentData(response: .presentMangaData(mangaData, false))
+        })
+    }
+    
   }
   
 }
