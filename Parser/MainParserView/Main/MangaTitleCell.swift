@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 import Kingfisher
 
 class MangaTitleCell: UITableViewCell {
@@ -14,11 +13,10 @@ class MangaTitleCell: UITableViewCell {
     static let reuseID = "TableViewCell"
     
     private let bgImageView = UIView()
-    
+
     private var cover: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
-        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
@@ -26,8 +24,7 @@ class MangaTitleCell: UITableViewCell {
         let lable = UILabel()
         lable.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         lable.textColor = .black
-        lable.numberOfLines = 0
-        lable.translatesAutoresizingMaskIntoConstraints = false
+        lable.numberOfLines = 3
         return lable
     }()
     
@@ -36,7 +33,6 @@ class MangaTitleCell: UITableViewCell {
         lable.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         lable.textColor = .darkGray
         lable.numberOfLines = 2
-        lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
     
@@ -44,8 +40,8 @@ class MangaTitleCell: UITableViewCell {
         let lable = UILabel()
         lable.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         lable.textColor = .black
+        lable.lineBreakMode = .byTruncatingTail
         lable.numberOfLines = 0
-        lable.translatesAutoresizingMaskIntoConstraints = false
         return lable
     }()
     
@@ -65,6 +61,7 @@ class MangaTitleCell: UITableViewCell {
         layer.shadowOpacity = 0.6
         layer.shadowOffset = CGSize(width: 0, height: 1)
         layer.shadowRadius = 2
+        setupFrameUI()
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -83,20 +80,52 @@ class MangaTitleCell: UITableViewCell {
         cover.image = nil
     }
     
+    
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        setupFrameUI()
+    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         
     }
     
     func configure(mangaModel: TitleModel) {
-        DispatchQueue.main.async {
             self.title.text = mangaModel.title
             self.author.text = "Автор: \(mangaModel.author)"
             self.descriptionTitle.text = mangaModel.description
             self.cover.kf.indicatorType = .activity
             self.cover.kf.setImage(with: mangaModel.cover)
+    }
+    
+    private func setupFrameUI() {
+    
+        bgImageView.frame = CGRect(x: 0, y: 0, width: 100, height: 140)
+        cover.frame = CGRect(x: 0, y: 0, width: 100, height: 140)
+        title.frame = CGRect(x: bgImageView.frame.maxX + 8,
+                             y: contentView.bounds.minY + 5,
+                             width: contentView.bounds.width - title.frame.minX - 8,
+                             height: title.font.lineHeight)
+        title.sizeToFit()
+        
+        author.frame = CGRect(x: title.frame.minX,
+                              y: title.frame.maxY + 5,
+                              width: contentView.bounds.width - title.frame.minX - 8,
+                              height: author.font.lineHeight)
+        author.sizeToFit()
+        
+        
+        descriptionTitle.frame = CGRect(x: author.frame.minX,
+                                        y: author.frame.maxY + 5,
+                                        width: contentView.bounds.width - title.frame.minX - 8,
+                                        height: contentView.bounds.height - descriptionTitle.frame.minY - 5)
+        let descriptionTitleSize: CGRect = descriptionTitle.frame
+        descriptionTitle.sizeToFit()
+        if descriptionTitle.frame.height > descriptionTitleSize.height {
+            descriptionTitle.frame = descriptionTitleSize
         }
-
+        
     }
     
     private func setupUI(){
@@ -105,34 +134,6 @@ class MangaTitleCell: UITableViewCell {
         contentView.addSubview(title)
         contentView.addSubview(author)
         contentView.addSubview(descriptionTitle)
-        
-        bgImageView.snp.makeConstraints { make in
-            make.top.left.bottom.equalToSuperview()
-            make.height.equalTo(140)
-            make.width.equalTo(100)
-        }
-        cover.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        title.snp.makeConstraints { make in
-            make.leading.equalTo(cover.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().inset(8)
-            make.top.equalToSuperview().offset(5)
-        }
-        
-        author.snp.makeConstraints { make in
-            make.leading.equalTo(title.snp.leading)
-            make.trailing.equalTo(title.snp.trailing)
-            make.top.equalTo(title.snp.bottom).offset(5)
-        }
-        
-        descriptionTitle.snp.makeConstraints { make in
-            make.leading.equalTo(title.snp.leading)
-            make.trailing.equalTo(title.snp.trailing)
-            make.top.equalTo(author.snp.bottom).offset(5)
-            make.bottom.lessThanOrEqualTo(cover.snp.bottom).inset(5)
-        }
 
     }
     
