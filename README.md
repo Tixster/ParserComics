@@ -1,11 +1,11 @@
 # ParserComics
 ## Парсер сайтов с комиксами
 ### Готово:
-* Парсер [hentaichan](https://hentaichan.live/)
+* Парсер [mangachan](https://manga-chan.me/) / [hentaichan](https://hentaichan.live/)
 ### В работе:
-#### [hentaichan](https://hentaichan.live/):
+#### [mangachan](https://manga-chan.me/) / [hentaichan](https://hentaichan.live/):
 - Страница с тайтлом
-- Движок читлки
+- Движок читалки
 
 ## Используемые библиотеки
 
