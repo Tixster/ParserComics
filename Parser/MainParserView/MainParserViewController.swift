@@ -66,7 +66,7 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.isHidden = false
-
+        
         title = "Обновления"
         
         setupIndicator()
@@ -132,21 +132,21 @@ extension MainParserViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-        if let titles = titles {
-            return titles.count
-        } else{
-            return 0
-        }
+            if let titles = titles {
+                return titles.count
+            } else{
+                return 0
+            }
         case 1: return 1
         default: return 0
-    }
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: MangaTitleCell.reuseID, for: indexPath) as! MangaTitleCell
-                return cell
+            return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: LoadingCell.reuseID, for: indexPath) as! LoadingCell
             cell.start()
@@ -154,7 +154,7 @@ extension MainParserViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             return UITableViewCell()
         }
-
+        
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -170,11 +170,14 @@ extension MainParserViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         default:
-            DispatchQueue.main.async {
-                self.interactor?.makeRequest(request: .getNextMangaList)
+            if !isLoading {
+                DispatchQueue.main.async {
+                    self.interactor?.makeRequest(request: .getNextMangaList)
+                }
+                isLoading.toggle()
             }
-            isLoading.toggle()
         }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -184,5 +187,5 @@ extension MainParserViewController: UITableViewDelegate, UITableViewDataSource {
         
         return 50
     }
-
+    
 }
