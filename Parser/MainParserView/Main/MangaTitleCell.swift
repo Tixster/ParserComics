@@ -49,7 +49,7 @@ class MangaTitleCell: UITableViewCell {
         super.layoutSubviews()
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10))
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10))
         bgImageView.layer.shadowColor = UIColor.black.cgColor
         bgImageView.layer.shadowOpacity = 1
         bgImageView.layer.shadowOffset = CGSize.zero

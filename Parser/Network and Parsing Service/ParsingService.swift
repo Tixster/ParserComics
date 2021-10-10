@@ -25,7 +25,7 @@ class ParsingService {
     
     // Получение списка тайтлов
     func fecthMangaList(url: URL) throws -> MangaData {
-        let html = try! String(contentsOf: url, encoding: .utf8)
+        let html = try String(contentsOf: url, encoding: .utf8)
         do {
             let doc: Document = try SwiftSoup.parseBodyFragment(html)
             let content = try doc.select("div[id=content]")
