@@ -43,7 +43,7 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
     private var isLoading = false
     private var isTableViewActive = false
     
-    // MARK: Setup
+    // MARK: - Setup
     
     private func setup() {
         let viewController        = self
@@ -121,15 +121,6 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
         interactor?.makeRequest(request: .getMangaList)
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        if (offsetY > contentHeight - scrollView.frame.height * 4) && !isLoading {
-            interactor?.makeRequest(request: .getNextMangaList)
-            isLoading.toggle()
-        }
-    }
-    
 }
 
 extension MainParserViewController: UITableViewDelegate, UITableViewDataSource {
@@ -173,12 +164,25 @@ extension MainParserViewController: UITableViewDelegate, UITableViewDataSource {
                 if let titles = titles {
                     let title = titles[indexPath.row]
                     cell.configure(mangaModel: title)
+                    cell.setNeedsLayout()
+                    cell.layoutIfNeeded()
                     cell.separatorInset = .zero
                 }
             }
         default:
-            return
+            DispatchQueue.main.async {
+                self.interactor?.makeRequest(request: .getNextMangaList)
+            }
+            isLoading.toggle()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 140
+        }
+        
+        return 50
     }
 
 }
