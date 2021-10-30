@@ -23,7 +23,7 @@ struct Manga {
     var manga: [TitleModel]
 }
 
-struct TitleModel {
+struct TitleModel: Codable {
     let title: String
     let cover: URL
     let description: String?

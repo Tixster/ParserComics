@@ -23,6 +23,9 @@
 		3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */; };
 		3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155E26E526CB00AD65B7 /* NetworkService.swift */; };
 		3EB07CE92712151600ACB989 /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB07CE82712151600ACB989 /* LoadingCell.swift */; };
+		3EB09830272AF9A70034A570 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0982F272AF9A60034A570 /* UILabel.swift */; };
+		3EB09832272B02D60034A570 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB09831272B02D60034A570 /* AlertManager.swift */; };
+		3ECC7227272D0B5400ABDA3C /* MainListTableView.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC7226272D0B5400ABDA3C /* MainListTableView.swift.swift */; };
 		3EFFBF8226FF71E30083CA56 /* MangaModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFBF8126FF71E30083CA56 /* MangaModels.swift */; };
 		3EFFBF85270073F80083CA56 /* MangaTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFBF84270073F80083CA56 /* MangaTitleCell.swift */; };
 		3EFFBF882700A8D10083CA56 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFBF872700A8D00083CA56 /* Extension.swift */; };
@@ -44,6 +47,9 @@
 		3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDataFecther.swift; sourceTree = "<group>"; };
 		3E9F155E26E526CB00AD65B7 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		3EB07CE82712151600ACB989 /* LoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
+		3EB0982F272AF9A60034A570 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
+		3EB09831272B02D60034A570 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		3ECC7226272D0B5400ABDA3C /* MainListTableView.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainListTableView.swift.swift; sourceTree = "<group>"; };
 		3EFFBF8126FF71E30083CA56 /* MangaModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaModels.swift; sourceTree = "<group>"; };
 		3EFFBF84270073F80083CA56 /* MangaTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaTitleCell.swift; sourceTree = "<group>"; };
 		3EFFBF872700A8D00083CA56 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -86,7 +92,7 @@
 				3EFFBF8026FF71CA0083CA56 /* Models */,
 				3E9F154A26E51F4D00AD65B7 /* MainParserView */,
 				3EFFBF862700A8B30083CA56 /* Helper */,
-				3E9F155926E5220800AD65B7 /* Network and Parsing Service */,
+				3E9F155926E5220800AD65B7 /* NetworkAndParsingService */,
 				3E9F153F26E5129A00AD65B7 /* Assets.xcassets */,
 				3E9F154126E5129A00AD65B7 /* LaunchScreen.storyboard */,
 				3E9F154426E5129A00AD65B7 /* Info.plist */,
@@ -108,14 +114,14 @@
 			path = MainParserView;
 			sourceTree = "<group>";
 		};
-		3E9F155926E5220800AD65B7 /* Network and Parsing Service */ = {
+		3E9F155926E5220800AD65B7 /* NetworkAndParsingService */ = {
 			isa = PBXGroup;
 			children = (
 				3E9F155A26E5229900AD65B7 /* ParsingService.swift */,
 				3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */,
 				3E9F155E26E526CB00AD65B7 /* NetworkService.swift */,
 			);
-			path = "Network and Parsing Service";
+			path = NetworkAndParsingService;
 			sourceTree = "<group>";
 		};
 		3EFFBF8026FF71CA0083CA56 /* Models */ = {
@@ -131,6 +137,7 @@
 			children = (
 				3EFFBF84270073F80083CA56 /* MangaTitleCell.swift */,
 				3EB07CE82712151600ACB989 /* LoadingCell.swift */,
+				3ECC7226272D0B5400ABDA3C /* MainListTableView.swift.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -139,6 +146,8 @@
 			isa = PBXGroup;
 			children = (
 				3EFFBF872700A8D00083CA56 /* Extension.swift */,
+				3EB0982F272AF9A60034A570 /* UILabel.swift */,
+				3EB09831272B02D60034A570 /* AlertManager.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -224,6 +233,7 @@
 			files = (
 				3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */,
 				3E9F155226E51FBD00AD65B7 /* MainParserPresenter.swift in Sources */,
+				3EB09832272B02D60034A570 /* AlertManager.swift in Sources */,
 				3EFFBF8226FF71E30083CA56 /* MangaModels.swift in Sources */,
 				3E9F155326E51FBD00AD65B7 /* MainParserWorker.swift in Sources */,
 				3EB07CE92712151600ACB989 /* LoadingCell.swift in Sources */,
@@ -231,7 +241,9 @@
 				3E9F155626E51FBD00AD65B7 /* MainParserViewController.swift in Sources */,
 				3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */,
 				3E9F155B26E5229900AD65B7 /* ParsingService.swift in Sources */,
+				3ECC7227272D0B5400ABDA3C /* MainListTableView.swift.swift in Sources */,
 				3E9F155426E51FBD00AD65B7 /* MainParserRouter.swift in Sources */,
+				3EB09830272AF9A70034A570 /* UILabel.swift in Sources */,
 				3EFFBF882700A8D10083CA56 /* Extension.swift in Sources */,
 				3EFFBF85270073F80083CA56 /* MangaTitleCell.swift in Sources */,
 				3E9F153726E5129600AD65B7 /* AppDelegate.swift in Sources */,
@@ -374,7 +386,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 7MH8KA7J8V;
 				INFOPLIST_FILE = Parser/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -383,6 +396,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = KirillTila.Parser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = Parser;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -393,7 +407,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 7MH8KA7J8V;
 				INFOPLIST_FILE = Parser/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -402,6 +417,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = KirillTila.Parser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = Parser;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

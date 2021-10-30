@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Network
 
 protocol Networking {
     func request(url: URL, completion: @escaping (Result<Data, Error>) -> Void)
@@ -15,6 +16,7 @@ protocol Networking {
 final class NetworkService {
     
     let session = URLSession.shared
+    let monitor = NWPathMonitor()
     
 }
 

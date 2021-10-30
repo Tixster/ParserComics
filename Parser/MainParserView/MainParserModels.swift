@@ -20,13 +20,11 @@ enum MainParser {
     struct Response {
       enum ResponseType {
         case presentMangaData(MangaData, Bool)
-        case presentFooterLoader
       }
     }
     struct ViewModel {
       enum ViewModelData {
           case displayMangaData([TitleModel])
-          case displayFooterLoaerd
 
       }
     }

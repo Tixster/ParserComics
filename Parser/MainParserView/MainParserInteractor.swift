@@ -28,7 +28,6 @@ class MainParserInteractor: MainParserBusinessLogic {
             self?.presenter?.presentData(response: .presentMangaData(data,true))
         }
     case .getNextMangaList:
-        presenter?.presentData(response: .presentFooterLoader)
         service?.getNextPangeMangaTitles(completion: { mangaData in
             self.presenter?.presentData(response: .presentMangaData(mangaData, false))
         })
