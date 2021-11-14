@@ -10,10 +10,11 @@ import Kingfisher
 
 class MangaTitleCell: UITableViewCell {
     
-    static let reuseID = "TableViewCell"
+    static let reuseID = "MangaTitleCell"
     
     private let bgImageView = UIView()
-
+    private let bgDescriptionView = UIView()
+    
     private var cover: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
@@ -37,11 +38,12 @@ class MangaTitleCell: UITableViewCell {
     }()
     
     private var descriptionTitle: UILabel = {
-        let lable = UILabel()
+        let lable = VerticalAlignLabel()
         lable.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         lable.textColor = .black
+        lable.verticalAlignment = .top
         lable.lineBreakMode = .byTruncatingTail
-        lable.numberOfLines = 0
+        lable.numberOfLines = 5
         return lable
     }()
     
@@ -78,6 +80,9 @@ class MangaTitleCell: UITableViewCell {
     
     override func prepareForReuse() {
         cover.image = nil
+        title.text = nil
+        author.text = nil
+        descriptionTitle.text = nil
     }
     
     
@@ -85,25 +90,20 @@ class MangaTitleCell: UITableViewCell {
         super.layoutIfNeeded()
         setupFrameUI()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     func configure(mangaModel: TitleModel) {
-            self.title.text = mangaModel.title
-            self.author.text = "Автор: \(mangaModel.author)"
-            self.descriptionTitle.text = mangaModel.description
-            self.cover.kf.indicatorType = .activity
-            self.cover.kf.setImage(with: mangaModel.cover)
+        self.title.text = mangaModel.title
+        self.author.text = "Автор: \(mangaModel.author)"
+        self.descriptionTitle.text = mangaModel.description
+        self.cover.kf.indicatorType = .activity
+        self.cover.kf.setImage(with: mangaModel.cover)
     }
     
     private func setupFrameUI() {
-    
+        
         bgImageView.frame = CGRect(x: 0, y: 0, width: 100, height: 140)
         cover.frame = CGRect(x: 0, y: 0, width: 100, height: 140)
-        title.frame = CGRect(x: bgImageView.frame.maxX + 8,
+        title.frame = CGRect(x: bgImageView.frame.width + 8,
                              y: contentView.bounds.minY + 5,
                              width: contentView.bounds.width - title.frame.minX - 8,
                              height: title.font.lineHeight)
@@ -116,15 +116,16 @@ class MangaTitleCell: UITableViewCell {
         author.sizeToFit()
         
         
-        descriptionTitle.frame = CGRect(x: author.frame.minX,
-                                        y: author.frame.maxY + 5,
-                                        width: contentView.bounds.width - title.frame.minX - 8,
-                                        height: contentView.bounds.height - descriptionTitle.frame.minY - 5)
-        let descriptionTitleSize: CGRect = descriptionTitle.frame
-        descriptionTitle.sizeToFit()
-        if descriptionTitle.frame.height > descriptionTitleSize.height {
-            descriptionTitle.frame = descriptionTitleSize
-        }
+        bgDescriptionView.frame = CGRect(x: author.frame.minX,
+                                         y: author.frame.maxY + 5,
+                                         width: contentView.bounds.width - title.frame.minX - 8,
+                                         height: contentView.bounds.height - bgDescriptionView.frame.minY - 5)
+        bgDescriptionView.clipsToBounds = true
+        
+        descriptionTitle.frame = CGRect(x: 0,
+                                        y: 0,
+                                        width: bgDescriptionView.bounds.width,
+                                        height: bgDescriptionView.bounds.height)
         
     }
     
@@ -133,8 +134,8 @@ class MangaTitleCell: UITableViewCell {
         bgImageView.addSubview(cover)
         contentView.addSubview(title)
         contentView.addSubview(author)
-        contentView.addSubview(descriptionTitle)
-
+        contentView.addSubview(bgDescriptionView)
+        bgDescriptionView.addSubview(descriptionTitle)
     }
     
 }

@@ -37,7 +37,8 @@ class ParsingService {
                 let descriptionManga = try curTitle.select("div.tags").text()
                 let author = try curTitle.select("h3.item2").text()
                 let titleLink = try curTitle.select("a").attr("href")
-                let originalCover = coverManga.replacingOccurrences(of: "_blur\\w*", with: "", options: [.regularExpression])
+                let originalBlurCover = coverManga.replacingOccurrences(of: "_thumbs_blur\\w*", with: "", options: [.regularExpression])
+                let originalCover = originalBlurCover.replacingOccurrences(of: "_thumbs\\w*", with: "", options: [.regularExpression])
                 curTitles.append(TitleModel(title: titleManga,
                                             cover: URL(string: originalCover)!,
                                             description: descriptionManga,

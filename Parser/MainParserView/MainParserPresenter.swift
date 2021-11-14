@@ -25,10 +25,20 @@ class MainParserPresenter: MainParserPresentationLogic {
         let _ = mangaData.titles.map { manga in
             mangaDataLists.append(manga)
         }
+        let jsonData = try! JSONEncoder().encode(mangaDataLists)
+        let decodeModel = try! JSONDecoder().decode([TitleModel].self, from: jsonData)
+        print(decodeModel[0].link, decodeModel[0].title)
+        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dataURL = documentDirectory.appendingPathComponent("MangaModelJSON")
+        do {
+            try FileManager.default.createDirectory(atPath: dataURL.path, withIntermediateDirectories: true, attributes: nil)
+            let fileUrl = dataURL.appendingPathComponent("mangaList.json")
+            try jsonData.write(to: fileUrl)
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
         
         viewController?.displayData(viewModel: .displayMangaData(mangaDataLists))
-    case .presentFooterLoader:
-        viewController?.displayData(viewModel: .displayFooterLoaerd)
     }
   }
   
