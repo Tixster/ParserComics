@@ -23,12 +23,41 @@ protocol MainParserDisplayLogic: AnyObject {
 class MainParserViewController: UIViewController, MainParserDisplayLogic {
     
     var interactor: MainParserBusinessLogic?
+    var titles = [TitleModel]()
+    var currentIndex = 0
     var router: (NSObjectProtocol & MainParserRoutingLogic)?
-    weak var delegateTableView: MainParserViewControllerDelegate?
+    weak var delegate: MainParserViewControllerDelegate?
+    private var collectionView: MainCollectionView? {
+        didSet {
+            if tableView == nil && collectionView == nil {
+                tableView = MainListTableView(titles: titles, currentIndexPathRow: currentIndex, frame: .zero, style: .plain)
+                setupTableView()
+            }
+        }
+    }
+    private var tableView: MainListTableView? {
+        didSet {
+            if collectionView == nil  && tableView == nil {
+                collectionView = MainCollectionView(titles: titles, currentIndexPathItem: currentIndex)
+                setupCollectionView()
+            }
+        }
+    }
     private let monitor = NWPathMonitor()
     private var indicator = UIActivityIndicatorView()
-    private lazy var tableView = MainListTableView(frame: .zero, style: .plain)
     private var isTableViewActive = false
+    private var isCollectionViewActive = false
+    private var isTitlesFetched = false
+    private var isTableEnabled: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "isTableEnabled")
+        }
+        
+        set {
+            UserDefaults.standard.set(newValue, forKey: "isTableEnabled")
+        }
+    }
+
     
     // MARK: - Setup
     
@@ -55,6 +84,10 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
         navigationController?.navigationBar.isHidden = false
         
         title = "Обновления"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "lineweight"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(changeList))
         
         setupIndicator()
         setup()
@@ -77,29 +110,68 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
         case .displayMangaData(let mangaData):
             print(mangaData)
             DispatchQueue.main.async {
-                self.setupTableView()
-                self.delegateTableView?.sendMangaData(self, data: mangaData)
-                self.indicator.stopAnimating()
+                if !self.isTitlesFetched {
+                    self.titles = mangaData
+                    if self.isTableEnabled {
+                        self.tableView = MainListTableView(titles: self.titles, currentIndexPathRow: self.currentIndex, frame: .zero, style: .plain)
+                        self.setupTableView()
+                        self.tableView?.reloadData()
+                    } else {
+                        self.collectionView = MainCollectionView(titles: self.titles, currentIndexPathItem: self.currentIndex)
+                        self.setupCollectionView()
+                        self.collectionView?.reloadData()
+                    }
+                    self.indicator.stopAnimating()
+                    self.isTitlesFetched = true
+                    return
+                }
+                self.titles = mangaData
+                self.delegate?.sendMangaData(self, data: self.titles)
             }
         }
     }
     
     private func setupTableView() {
         guard !isTableViewActive else { return }
+        guard let tableView = tableView else { return }
+
         view.addSubview(tableView)
-        delegateTableView = tableView
+        delegate = tableView
         tableView.fetchNextTitles = { [weak self] in
             self?.interactor?.makeRequest(request: .getNextMangaList)
         }
         tableView.fetchMangaList = { [weak self] in
             self?.interactor?.makeRequest(request: .getMangaList)
         }
-        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         tableView.snp.makeConstraints({
-            $0.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
+            $0.bottom.equalTo(view.snp.bottom)
         })
+        isTableEnabled = true
         isTableViewActive = true
-        
+    }
+    
+    private func setupCollectionView() {
+        guard !isCollectionViewActive else { return }
+        guard let collectionView = collectionView else { return }
+        view.addSubview(collectionView)
+        delegate = collectionView
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing)
+            make.bottom.equalTo(view.snp.bottom)
+        }
+        isCollectionViewActive = true
+        isTableEnabled = false
+        collectionView.fetchNextTitles = { [weak self] in
+            self?.interactor?.makeRequest(request: .getNextMangaList)
+        }
+        collectionView.fetchMangaList = { [weak self] in
+            self?.interactor?.makeRequest(request: .getMangaList)
+        }
     }
     
     private func setupIndicator() {
@@ -110,6 +182,21 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
             make.height.width.equalTo(30)
         }
         indicator.startAnimating()
+    }
+    
+    @objc
+    private func changeList() {
+        if tableView != nil {
+            self.currentIndex = tableView?.currentIndexPathRow ?? 0
+            tableView?.removeFromSuperview()
+            tableView = nil
+            isTableViewActive = false
+        } else {
+            self.currentIndex = collectionView?.currentIndexPathItem ?? 0
+            collectionView?.removeFromSuperview()
+            collectionView = nil
+            isCollectionViewActive = false
+        }
     }
     
 }

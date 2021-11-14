@@ -17,7 +17,7 @@ class MangaTitleCell: UITableViewCell {
     
     private var cover: UIImageView = {
         let image = UIImageView()
-        image.contentMode = .scaleAspectFit
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
@@ -80,6 +80,9 @@ class MangaTitleCell: UITableViewCell {
     
     override func prepareForReuse() {
         cover.image = nil
+        title.text = nil
+        author.text = nil
+        descriptionTitle.text = nil
     }
     
     
@@ -87,12 +90,7 @@ class MangaTitleCell: UITableViewCell {
         super.layoutIfNeeded()
         setupFrameUI()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
+
     func configure(mangaModel: TitleModel) {
         self.title.text = mangaModel.title
         self.author.text = "Автор: \(mangaModel.author)"

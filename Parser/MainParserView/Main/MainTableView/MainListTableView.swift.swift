@@ -9,7 +9,8 @@ import UIKit
 
 class MainListTableView: UITableView {
     
-    private var titles: [TitleModel]?
+    private var titles: [TitleModel]
+    var currentIndexPathRow: Int
     private lazy var footerView = LoadingCell()
     private var isLoading = false
     var fetchNextTitles: (() -> Void)?
@@ -20,9 +21,13 @@ class MainListTableView: UITableView {
         return control
     }()
     
-    override init(frame: CGRect, style: UITableView.Style) {
+    
+    init(titles: [TitleModel], currentIndexPathRow: Int, frame: CGRect, style: UITableView.Style) {
+        self.titles = titles
+        self.currentIndexPathRow = currentIndexPathRow
         super.init(frame: frame, style: style)
         setupTable()
+        scrollToRow(at: IndexPath(row: currentIndexPathRow, section: 0), at: .top, animated: false)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -44,6 +49,10 @@ class MainListTableView: UITableView {
         fetchMangaList?()
     }
     
+    deinit {
+        print(#function)
+    }
+    
 }
 
 extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
@@ -54,12 +63,7 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0:
-            if let titles = titles {
-                return titles.count
-            } else{
-                return 0
-            }
+        case 0: return titles.count
         case 1: return 1
         default: return 0
         }
@@ -69,6 +73,7 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: MangaTitleCell.reuseID, for: indexPath) as! MangaTitleCell
+            currentIndexPathRow = indexPath.row
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: LoadingCell.reuseID, for: indexPath) as! LoadingCell
@@ -79,18 +84,16 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
         }
         
     }
-    
+
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             if let cell = cell as? MangaTitleCell {
-                if let titles = titles {
-                    let title = titles[indexPath.row]
-                    cell.configure(mangaModel: title)
-                    cell.setNeedsLayout()
-                    cell.layoutIfNeeded()
-                    cell.separatorInset = .zero
-                }
+                let title = titles[indexPath.row]
+                cell.configure(mangaModel: title)
+                cell.setNeedsLayout()
+                cell.layoutIfNeeded()
+                cell.separatorInset = .zero
             }
         default:
             if !isLoading {
