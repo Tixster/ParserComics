@@ -24,7 +24,7 @@ class MainParserInteractor: MainParserBusinessLogic {
     
     switch request {
     case .getMangaList:
-        service?.getMangaTitle(url:  URL(string: Constants.siteNewMangaPageURL)!) { [weak self] data in
+        service?.getMangaTitle(url:  URL(string: Constants.SiteLinks.siteNewMangaPageURL)!) { [weak self] data in
             self?.presenter?.presentData(response: .presentMangaData(data,true))
         }
     case .getNextMangaList:

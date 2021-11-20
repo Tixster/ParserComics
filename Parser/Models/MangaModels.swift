@@ -8,11 +8,6 @@
 import Foundation
 import UIKit
 
-struct Constants {
-    static let siteMainPageURL = "https://hentaichan.live"
-    static let siteNewMangaPageURL = "https://hentaichan.live/manga/new"
-}
-
 struct MangaData {
     let titles: [TitleModel]
     let nextPage: URL

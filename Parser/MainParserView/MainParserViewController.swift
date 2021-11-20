@@ -9,7 +9,6 @@
 import UIKit
 import SnapKit
 import SwiftSoup
-import Kingfisher
 import Network
 
 protocol MainParserViewControllerDelegate: AnyObject {
@@ -91,17 +90,7 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
         
         setupIndicator()
         setup()
-        let queue = DispatchQueue(label: "Monitor")
-        monitor.start(queue: queue)
-        monitor.pathUpdateHandler = { [unowned self] path in
-            if path.status == .satisfied {
-                self.interactor?.makeRequest(request: .getMangaList)
-            } else {
-                DispatchQueue.main.async {
-                    AlertManager.noInternetAlert()
-                }
-            }
-        }
+        self.interactor?.makeRequest(request: .getMangaList)
         view.backgroundColor = .white
     }
 

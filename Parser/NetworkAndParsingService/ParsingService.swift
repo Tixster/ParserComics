@@ -8,7 +8,6 @@
 import Foundation
 import SwiftSoup
 import UIKit
-import Kingfisher
 
 enum ParseError: Error {
     case linksPageIsNill(String)
@@ -43,10 +42,10 @@ class ParsingService {
                                             cover: URL(string: originalCover)!,
                                             description: descriptionManga,
                                             author: author,
-                                            link: URL(string: Constants.siteMainPageURL + titleLink)!))
+                                            link: URL(string: Constants.SiteLinks.siteMainPageURL + titleLink)!))
             }
             let nextPage = try doc.select("div[id=pagination] a:contains(Вперед)").attr("href")
-            let mangaData = MangaData(titles: curTitles, nextPage: URL(string: Constants.siteNewMangaPageURL + nextPage)!)
+            let mangaData = MangaData(titles: curTitles, nextPage: URL(string: Constants.SiteLinks.siteNewMangaPageURL + nextPage)!)
             return mangaData
         } catch Exception.Error(type: let type, Message: let message){
             print("type: \(type), message: \(message)")

@@ -103,8 +103,11 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
 extension MainCollectionView: MainParserViewControllerDelegate {
     func sendMangaData(_ vc: UIViewController, data: [TitleModel]) {
         titles = data
-        reloadData()
         isLoading = false
+        DispatchQueue.main.async {
+            self.reloadData()
+            self.refreshControl?.endRefreshing()
+        }
     }
     
     

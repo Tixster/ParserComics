@@ -73,6 +73,8 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: MangaTitleCell.reuseID, for: indexPath) as! MangaTitleCell
+            let title = titles[indexPath.row]
+            cell.configure(mangaModel: title)
             currentIndexPathRow = indexPath.row
             return cell
         case 1:
@@ -87,21 +89,15 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         switch indexPath.section {
-        case 0:
-            if let cell = cell as? MangaTitleCell {
-                let title = titles[indexPath.row]
-                cell.configure(mangaModel: title)
-                cell.setNeedsLayout()
-                cell.layoutIfNeeded()
-                cell.separatorInset = .zero
-            }
-        default:
+        case 1:
             if !isLoading {
                 DispatchQueue.main.async {
                     self.fetchNextTitles?()
                 }
                 isLoading.toggle()
             }
+        default:
+            return
         }
         
     }
@@ -116,7 +112,7 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 140
+            return Constants.MainTableView.heightTableViewMangaCell
         }
         
         return 50
@@ -128,8 +124,11 @@ extension MainListTableView: MainParserViewControllerDelegate {
     func sendMangaData(_ vc: UIViewController, data: [TitleModel]) {
         titles = data
         isLoading = false
-        refreshControl?.endRefreshing()
-        reloadData()
+        DispatchQueue.main.async {
+            self.refreshControl?.endRefreshing()
+            self.reloadData()
+        }
+
     }
     
 }
