@@ -11,4 +11,4 @@
 
 - [SwiftSoup](https://github.com/scinfu/SwiftSoup#pseudo-selectors) - для парсинга HTML-страниц;
 - [SnapKit](https://github.com/SnapKit/SnapKit) - для AutoLayout'а;
-- [Kingfisher](https://github.com/onevcat/Kingfisher) - для кэширования изображений.
+- [SDWebImage](https://github.com/SDWebImage/SDWebImage) - для кэширования изображений.
