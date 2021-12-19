@@ -22,9 +22,10 @@ protocol MainParserDisplayLogic: AnyObject {
 class MainParserViewController: UIViewController, MainParserDisplayLogic {
     
     var interactor: MainParserBusinessLogic?
+    var router: (NSObjectProtocol & MainParserRoutingLogic)?
+
     var titles = [TitleModel]()
     var currentIndex = 0
-    var router: (NSObjectProtocol & MainParserRoutingLogic)?
     weak var delegate: MainParserViewControllerDelegate?
     private var collectionView: MainCollectionView? {
         didSet {
@@ -74,7 +75,9 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
     
     // MARK: Routing
     
-    
+    func rout() {
+        
+    }
     
     // MARK: View lifecycle
     

@@ -24,5 +24,8 @@ struct TitleModel: Codable {
     let description: String?
     let author: String
     let link: URL
+    let likes: Int
+    let views: Int
+    let pages: Int
 }
 

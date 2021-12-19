@@ -22,7 +22,7 @@ struct NetworkDataFecther: DataFetcher {
     }
     
     func getHTML(response: @escaping (Result<Data, Error>) -> Void) {
-        guard let url = URL(string: "https://hentaichan.live/manga/new") else {
+        guard let url = URL(string: Constants.SiteLinks.siteNewMangaPageURL) else {
             print("URL не валидный")
             return
         }

@@ -8,7 +8,13 @@
 
 import UIKit
 
-class MainParserService {
+protocol MainParserServiceLogic {
+    func getHTML(completion: @escaping (Data) -> Void)
+    func getMangaTitle(url: URL, completion: @escaping(MangaData) -> Void)
+    func getNextPangeMangaTitles(completion: @escaping(MangaData) -> Void) 
+}
+
+class MainParserService: MainParserServiceLogic {
     
     private var fetcher: DataFetcher = NetworkDataFecther(networking: NetworkService())
     private var nextPage: URL?

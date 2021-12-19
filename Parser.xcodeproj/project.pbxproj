@@ -24,6 +24,13 @@
 		3E9F155B26E5229900AD65B7 /* ParsingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155A26E5229900AD65B7 /* ParsingService.swift */; };
 		3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */; };
 		3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9F155E26E526CB00AD65B7 /* NetworkService.swift */; };
+		3EA37A73276F3873006EE18D /* DetailParserModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A72276F3873006EE18D /* DetailParserModels.swift */; };
+		3EA37A75276F4E2C006EE18D /* DetailParserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A74276F4E2C006EE18D /* DetailParserRouter.swift */; };
+		3EA37A77276F4E7E006EE18D /* DetailParserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A76276F4E7E006EE18D /* DetailParserViewController.swift */; };
+		3EA37A79276F4FBF006EE18D /* DetailParserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A78276F4FBF006EE18D /* DetailParserInteractor.swift */; };
+		3EA37A7B276F5051006EE18D /* DetailParserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A7A276F5051006EE18D /* DetailParserPresenter.swift */; };
+		3EA37A7D276F54BB006EE18D /* DetailParserWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A7C276F54BB006EE18D /* DetailParserWorker.swift */; };
+		3EA37A7F276F8F7C006EE18D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA37A7E276F8F7C006EE18D /* String.swift */; };
 		3EB07CE92712151600ACB989 /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB07CE82712151600ACB989 /* LoadingCell.swift */; };
 		3EB09830272AF9A70034A570 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0982F272AF9A60034A570 /* UILabel.swift */; };
 		3EB09832272B02D60034A570 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB09831272B02D60034A570 /* AlertManager.swift */; };
@@ -52,6 +59,13 @@
 		3E9F155A26E5229900AD65B7 /* ParsingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingService.swift; sourceTree = "<group>"; };
 		3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDataFecther.swift; sourceTree = "<group>"; };
 		3E9F155E26E526CB00AD65B7 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		3EA37A72276F3873006EE18D /* DetailParserModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParserModels.swift; sourceTree = "<group>"; };
+		3EA37A74276F4E2C006EE18D /* DetailParserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParserRouter.swift; sourceTree = "<group>"; };
+		3EA37A76276F4E7E006EE18D /* DetailParserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParserViewController.swift; sourceTree = "<group>"; };
+		3EA37A78276F4FBF006EE18D /* DetailParserInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParserInteractor.swift; sourceTree = "<group>"; };
+		3EA37A7A276F5051006EE18D /* DetailParserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParserPresenter.swift; sourceTree = "<group>"; };
+		3EA37A7C276F54BB006EE18D /* DetailParserWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailParserWorker.swift; sourceTree = "<group>"; };
+		3EA37A7E276F8F7C006EE18D /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		3EB07CE82712151600ACB989 /* LoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
 		3EB0982F272AF9A60034A570 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		3EB09831272B02D60034A570 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
@@ -98,10 +112,11 @@
 			children = (
 				3E9F153626E5129600AD65B7 /* AppDelegate.swift */,
 				3E5D098C2744276700D25017 /* Constants.swift */,
-				3EFFBF8026FF71CA0083CA56 /* Models */,
-				3E9F154A26E51F4D00AD65B7 /* MainParserView */,
-				3EFFBF862700A8B30083CA56 /* Helper */,
 				3E9F155926E5220800AD65B7 /* NetworkAndParsingService */,
+				3EFFBF862700A8B30083CA56 /* Helper */,
+				3EFFBF8026FF71CA0083CA56 /* Models */,
+				3EA37A63276F37AF006EE18D /* DetailParserViewController */,
+				3E9F154A26E51F4D00AD65B7 /* MainParserViewController */,
 				3E9F153F26E5129A00AD65B7 /* Assets.xcassets */,
 				3E9F154126E5129A00AD65B7 /* LaunchScreen.storyboard */,
 				3E9F154426E5129A00AD65B7 /* Info.plist */,
@@ -109,7 +124,7 @@
 			path = Parser;
 			sourceTree = "<group>";
 		};
-		3E9F154A26E51F4D00AD65B7 /* MainParserView */ = {
+		3E9F154A26E51F4D00AD65B7 /* MainParserViewController */ = {
 			isa = PBXGroup;
 			children = (
 				3EFFBF83270073B30083CA56 /* Main */,
@@ -120,7 +135,7 @@
 				3E9F154C26E51FBC00AD65B7 /* MainParserWorker.swift */,
 				3E9F154E26E51FBC00AD65B7 /* MainParserModels.swift */,
 			);
-			path = MainParserView;
+			path = MainParserViewController;
 			sourceTree = "<group>";
 		};
 		3E9F155926E5220800AD65B7 /* NetworkAndParsingService */ = {
@@ -131,6 +146,19 @@
 				3E9F155E26E526CB00AD65B7 /* NetworkService.swift */,
 			);
 			path = NetworkAndParsingService;
+			sourceTree = "<group>";
+		};
+		3EA37A63276F37AF006EE18D /* DetailParserViewController */ = {
+			isa = PBXGroup;
+			children = (
+				3EA37A72276F3873006EE18D /* DetailParserModels.swift */,
+				3EA37A76276F4E7E006EE18D /* DetailParserViewController.swift */,
+				3EA37A78276F4FBF006EE18D /* DetailParserInteractor.swift */,
+				3EA37A7A276F5051006EE18D /* DetailParserPresenter.swift */,
+				3EA37A74276F4E2C006EE18D /* DetailParserRouter.swift */,
+				3EA37A7C276F54BB006EE18D /* DetailParserWorker.swift */,
+			);
+			path = DetailParserViewController;
 			sourceTree = "<group>";
 		};
 		3EBE817A272D54FB00A4212D /* MainTableView */ = {
@@ -192,6 +220,7 @@
 				3EB0982F272AF9A60034A570 /* UILabel.swift */,
 				3EB09831272B02D60034A570 /* AlertManager.swift */,
 				3E45099327405B4A0061C4FF /* UIImage.swift */,
+				3EA37A7E276F8F7C006EE18D /* String.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -277,11 +306,14 @@
 			files = (
 				3EBE8182272D587C00A4212D /* TitileCollectionCell.swift in Sources */,
 				3E45099427405B4A0061C4FF /* UIImage.swift in Sources */,
+				3EA37A7B276F5051006EE18D /* DetailParserPresenter.swift in Sources */,
 				3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */,
 				3E9F155226E51FBD00AD65B7 /* MainParserPresenter.swift in Sources */,
+				3EA37A75276F4E2C006EE18D /* DetailParserRouter.swift in Sources */,
 				3EB09832272B02D60034A570 /* AlertManager.swift in Sources */,
 				3EFFBF8226FF71E30083CA56 /* MangaModels.swift in Sources */,
 				3E9F155326E51FBD00AD65B7 /* MainParserWorker.swift in Sources */,
+				3EA37A73276F3873006EE18D /* DetailParserModels.swift in Sources */,
 				3EB07CE92712151600ACB989 /* LoadingCell.swift in Sources */,
 				3EBE817E272D555200A4212D /* MainCollectionView.swift in Sources */,
 				3E9F155726E51FBD00AD65B7 /* MainParserInteractor.swift in Sources */,
@@ -290,10 +322,14 @@
 				3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */,
 				3E9F155B26E5229900AD65B7 /* ParsingService.swift in Sources */,
 				3ECC7227272D0B5400ABDA3C /* MainListTableView.swift.swift in Sources */,
+				3EA37A7F276F8F7C006EE18D /* String.swift in Sources */,
 				3E9F155426E51FBD00AD65B7 /* MainParserRouter.swift in Sources */,
 				3EB09830272AF9A70034A570 /* UILabel.swift in Sources */,
 				3EFFBF882700A8D10083CA56 /* Extension.swift in Sources */,
+				3EA37A77276F4E7E006EE18D /* DetailParserViewController.swift in Sources */,
 				3EFFBF85270073F80083CA56 /* MangaTitleCell.swift in Sources */,
+				3EA37A79276F4FBF006EE18D /* DetailParserInteractor.swift in Sources */,
+				3EA37A7D276F54BB006EE18D /* DetailParserWorker.swift in Sources */,
 				3E9F153726E5129600AD65B7 /* AppDelegate.swift in Sources */,
 				3E9F155526E51FBD00AD65B7 /* MainParserModels.swift in Sources */,
 			);

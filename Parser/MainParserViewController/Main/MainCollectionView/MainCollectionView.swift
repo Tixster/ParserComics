@@ -34,6 +34,14 @@ class MainCollectionView: UICollectionView {
         self.titles = titles
         self.currentIndexPathItem = currentIndexPathItem
         super.init(frame: .zero, collectionViewLayout: myLayout)
+        setupCollection()
+    }
+    
+    private func stupLayout() {
+        
+    }
+    
+    private func setupCollection() {
         delegate = self
         dataSource = self
         backgroundColor = .white
