@@ -9,11 +9,10 @@ import Foundation
 import UIKit
 
 protocol DataFetcher {
-    func getHTML(response: @escaping (Result<Data, Error>) -> Void)
-    func getMangaList(url: URL, response: @escaping(Result<MangaData, Error>) -> Void)
+    func getMangaList(url: URL) async throws -> MangaData
 }
 
-struct NetworkDataFecther: DataFetcher {
+struct NetworkDataFecther: DataFetcher, HTTPClient {
     
     let networking: Networking
     
@@ -21,32 +20,8 @@ struct NetworkDataFecther: DataFetcher {
         self.networking = networking
     }
     
-    func getHTML(response: @escaping (Result<Data, Error>) -> Void) {
-        guard let url = URL(string: "https://hentaichan.live/manga/new") else {
-            print("URL не валидный")
-            return
-        }
-        networking.request(url: url) { result in
-            switch result {
-            case .failure(let error):
-                response(.failure(error))
-            case .success(let data):
-                response(.success(data))
-            }
-        
-        }
+    func getMangaList(url: URL) async throws -> MangaData {
+        return try await networking.requestMangaTitle(url: url)
     }
-    
-    func getMangaList(url: URL, response: @escaping (Result<MangaData, Error>) -> Void) {
-        networking.requestMangaTitle(url: url) { result in
-            switch result {
-            case .failure(let error):
-                response(.failure(error))
-            case .success(let data):
-                response(.success(data))
-            }
-        }
-    }
-    
-    
+
 }

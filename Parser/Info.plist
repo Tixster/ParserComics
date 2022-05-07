@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -24,30 +26,30 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>img.imgschan.xyz</key>
-			<dict>
-                <key>NSIncludesSubdomains</key>
-                 <false/>
-                 <key>NSExceptionAllowInsecureHTTPSLoads</key>
-                 <false/>
-                 <key>NSExceptionRequiresForwardSecrecy</key>
-                 <true/>
-                 <key>NSExceptionMinimumTLSVersion</key>
-                 <string>TLSv1.2</string>
-                 <key>NSThirdPartyExceptionAllowInsecureHTTPSLoads</key>
-                 <false/>
-                 <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-                 <true/>
-                 <key>NSThirdPartyExceptionMinimumTLSVersion</key>
-                 <string>TLSv1.2</string>
-                 <key>NSRequiresCertificateTransparency</key>
-                 <false/>
-			</dict>
 			<key>exhentai-dono.me</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
 				<true/>
 				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>img.imgschan.xyz</key>
+			<dict>
+				<key>NSExceptionAllowInsecureHTTPSLoads</key>
+				<false/>
+				<key>NSExceptionMinimumTLSVersion</key>
+				<string>TLSv1.2</string>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<false/>
+				<key>NSRequiresCertificateTransparency</key>
+				<false/>
+				<key>NSThirdPartyExceptionAllowInsecureHTTPSLoads</key>
+				<false/>
+				<key>NSThirdPartyExceptionMinimumTLSVersion</key>
+				<string>TLSv1.2</string>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
 				<true/>
 			</dict>
 		</dict>
@@ -60,6 +62,10 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<true/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

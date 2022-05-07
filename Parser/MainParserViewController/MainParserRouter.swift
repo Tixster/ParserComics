@@ -10,6 +10,8 @@ import UIKit
 
 protocol MainParserRoutingLogic {
 
+    func openDetailMangaController()
+    
 }
 
 class MainParserRouter: NSObject, MainParserRoutingLogic {
@@ -17,5 +19,8 @@ class MainParserRouter: NSObject, MainParserRoutingLogic {
   weak var viewController: MainParserViewController?
   
   // MARK: Routing
+    func openDetailMangaController() {
+
+    }
   
 }

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Kingfisher
+import SDWebImage
 
 class MangaTitleCell: UITableViewCell {
     
@@ -18,6 +18,7 @@ class MangaTitleCell: UITableViewCell {
     private var cover: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
+        image.sd_imageIndicator = SDWebImageActivityIndicator.gray
         return image
     }()
     
@@ -29,40 +30,54 @@ class MangaTitleCell: UITableViewCell {
         return lable
     }()
     
+    private var info: UILabel = {
+        let lable = UILabel()
+        lable.font = UIFont.systemFont(ofSize: 8, weight: .medium)
+        lable.textColor = .black
+        lable.numberOfLines = 1
+        return lable
+    }()
+    
     private var author: UILabel = {
         let lable = UILabel()
-        lable.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        lable.font = UIFont.systemFont(ofSize: 10, weight: .regular)
         lable.textColor = .darkGray
         lable.numberOfLines = 2
         return lable
     }()
     
-    private var descriptionTitle: UILabel = {
-        let lable = VerticalAlignLabel()
+    private var descriptionTitle: UITextView = {
+        let lable = UITextView()
         lable.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         lable.textColor = .black
-        lable.verticalAlignment = .top
-        lable.lineBreakMode = .byTruncatingTail
-        lable.numberOfLines = 5
+        lable.textAlignment = .left
+        lable.textContainerInset = .zero
+        lable.textContainer.lineFragmentPadding = .zero
+        lable.isEditable = false
+        lable.showsVerticalScrollIndicator = false
+        lable.linkTextAttributes = [.foregroundColor: UIColor.blue,
+                                    .underlineStyle: NSUnderlineStyle.single.rawValue]
         return lable
     }()
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.layer.cornerRadius = 8
-        contentView.clipsToBounds = true
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10))
+        contentView.layer.cornerRadius = Constants.MainTableView.heightTableViewMangaCell * 0.08
+        contentView.layer.masksToBounds = true
+        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: UIScreen.main.bounds.height * 0.015, left: UIScreen.main.bounds.width * 0.026, bottom: 0, right: UIScreen.main.bounds.width * 0.026))
         bgImageView.layer.shadowColor = UIColor.black.cgColor
         bgImageView.layer.shadowOpacity = 1
         bgImageView.layer.shadowOffset = CGSize.zero
+        bgImageView.layer.shadowPath = UIBezierPath(rect: bgImageView.bounds).cgPath
         bgImageView.layer.shadowRadius = 2
         bgImageView.layer.masksToBounds = false
-        cover.clipsToBounds = true
+        cover.layer.masksToBounds = true
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.6
         layer.shadowOffset = CGSize(width: 0, height: 1)
         layer.shadowRadius = 2
+        layer.isOpaque = true
         setupFrameUI()
     }
     
@@ -71,6 +86,7 @@ class MangaTitleCell: UITableViewCell {
         self.backgroundColor = .clear
         contentView.backgroundColor = .white
         self.selectionStyle = .none
+        separatorInset = .zero
         setupUI()
     }
     
@@ -79,6 +95,7 @@ class MangaTitleCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         cover.image = nil
         title.text = nil
         author.text = nil
@@ -95,17 +112,24 @@ class MangaTitleCell: UITableViewCell {
         self.title.text = mangaModel.title
         self.author.text = "Автор: \(mangaModel.author)"
         self.descriptionTitle.text = mangaModel.description
-        self.cover.kf.indicatorType = .activity
-        self.cover.kf.setImage(with: mangaModel.cover)
+        cover.sd_setImage(with: mangaModel.cover)
+        info.text = "Просмотры: \(mangaModel.views), Лайки: \(mangaModel.likes), Страниц: \(mangaModel.pages)"
     }
     
     private func setupFrameUI() {
         
-        bgImageView.frame = CGRect(x: 0, y: 0, width: 100, height: 140)
-        cover.frame = CGRect(x: 0, y: 0, width: 100, height: 140)
-        title.frame = CGRect(x: bgImageView.frame.width + 8,
-                             y: contentView.bounds.minY + 5,
-                             width: contentView.bounds.width - title.frame.minX - 8,
+        bgImageView.frame = CGRect(x: 0, y: 0,
+                                   width: Constants.MainTableView.widthCoverTableCell,
+                                   height: Constants.MainTableView.heightTableViewMangaCell)
+        cover.frame = CGRect(x: 0, y: 0,
+                             width: Constants.MainTableView.widthCoverTableCell,
+                             height: Constants.MainTableView.heightTableViewMangaCell)
+        title.frame = CGRect(x: bgImageView.frame.width +
+                                Constants.MainTableView.widthCoverTableCell * 0.08,
+                             y: contentView.bounds.minY +
+                                Constants.MainTableView.heightTableViewMangaCell * 0.03,
+                             width: contentView.bounds.width - title.frame.minX -
+                                Constants.MainTableView.widthCoverTableCell * 0.08,
                              height: title.font.lineHeight)
         title.sizeToFit()
         
@@ -117,15 +141,20 @@ class MangaTitleCell: UITableViewCell {
         
         
         bgDescriptionView.frame = CGRect(x: author.frame.minX,
-                                         y: author.frame.maxY + 5,
-                                         width: contentView.bounds.width - title.frame.minX - 8,
-                                         height: contentView.bounds.height - bgDescriptionView.frame.minY - 5)
+                                         y: author.frame.maxY + Constants.MainTableView.widthCoverTableCell * 0.05,
+                                         width: contentView.bounds.width - title.frame.minX - Constants.MainTableView.widthTableViewMangaCell * 0.08,
+                                         height: contentView.bounds.height - bgDescriptionView.frame.minY - Constants.MainTableView.heightTableViewMangaCell * 0.07)
         bgDescriptionView.clipsToBounds = true
         
         descriptionTitle.frame = CGRect(x: 0,
                                         y: 0,
                                         width: bgDescriptionView.bounds.width,
                                         height: bgDescriptionView.bounds.height)
+        
+        info.frame = CGRect(x: bgDescriptionView.frame.minX,
+                            y: bgDescriptionView.frame.maxY + 2,
+                            width: bgDescriptionView.bounds.width,
+                            height: info.font.lineHeight)
         
     }
     
@@ -135,6 +164,7 @@ class MangaTitleCell: UITableViewCell {
         contentView.addSubview(title)
         contentView.addSubview(author)
         contentView.addSubview(bgDescriptionView)
+        contentView.addSubview(info)
         bgDescriptionView.addSubview(descriptionTitle)
     }
     

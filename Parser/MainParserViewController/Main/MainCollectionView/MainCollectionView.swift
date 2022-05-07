@@ -9,13 +9,15 @@ import UIKit
 
 class MainCollectionView: UICollectionView {
     
+    
     private var titles: [TitleModel]
     var currentIndexPathItem: Int
     var fetchNextTitles: (() -> Void)?
     var fetchMangaList: (() -> Void)?
+    var pushVc: ((UIViewController) -> Void)?
     private var isLoading = false
-    private let footerView = UIActivityIndicatorView(style: .white)
-    private var collectionViewRefreshControl: UIRefreshControl = {
+    private let footerView = UIActivityIndicatorView(style: .medium)
+    private lazy var collectionViewRefreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return control
@@ -34,6 +36,14 @@ class MainCollectionView: UICollectionView {
         self.titles = titles
         self.currentIndexPathItem = currentIndexPathItem
         super.init(frame: .zero, collectionViewLayout: myLayout)
+        setupCollection()
+    }
+    
+    private func stupLayout() {
+        
+    }
+    
+    private func setupCollection() {
         delegate = self
         dataSource = self
         backgroundColor = .white
@@ -74,6 +84,12 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
         return UICollectionViewCell()
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let title = titles[indexPath.item]
+        let vc = ReaderCollectionViewController(link: title.link, title: title.title)
+        pushVc?(vc)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath)
@@ -103,8 +119,11 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
 extension MainCollectionView: MainParserViewControllerDelegate {
     func sendMangaData(_ vc: UIViewController, data: [TitleModel]) {
         titles = data
-        reloadData()
         isLoading = false
+        DispatchQueue.main.async {
+            self.reloadData()
+            self.refreshControl?.endRefreshing()
+        }
     }
     
     

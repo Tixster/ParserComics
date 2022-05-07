@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Kingfisher
+import SDWebImage
 
 class TitileCollectionCell: UICollectionViewCell {
     
@@ -14,9 +14,9 @@ class TitileCollectionCell: UICollectionViewCell {
     private let cover: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
+        image.sd_imageIndicator = SDWebImageActivityIndicator.gray
         return image
     }()
-    
     private let gradientView = UIView()
     private let gradient = CAGradientLayer()
     
@@ -42,20 +42,30 @@ class TitileCollectionCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.cover.image = nil
+        title.text = nil
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = 12
+        contentView.layer.masksToBounds = true
+        contentView.layer.cornerRadius = UIScreen.main.bounds.height * 0.018
         contentView.layer.borderWidth = 2
+        contentView.layer.shadowPath = UIBezierPath(rect: contentView.bounds).cgPath
         contentView.layer.borderColor = UIColor.black.cgColor
+        cover.frame = CGRect(x: 0, y: 0, width: contentView.bounds.width, height: contentView.bounds.height)
+        gradientView.frame = CGRect(x: 0,
+                                    y: Constants.MainCollectionView.itemSize.height / 2,
+                                    width: Constants.MainCollectionView.itemSize.width,
+                                    height: Constants.MainCollectionView.itemSize.height / 2)
         gradient.frame = gradientView.bounds
+        title.frame = CGRect(x: 0, y: 0,
+                             width: Constants.MainCollectionView.itemSize.width - 10,
+                             height: Constants.MainCollectionView.itemSize.height - 5)
+        title.center.x = contentView.center.x
     }
     
     func set(imageURL: URL, title: String) {
-        self.cover.kf.indicatorType = .activity
-        self.cover.kf.setImage(with: imageURL)
+        cover.sd_setImage(with: imageURL)
         self.title.text = title
         setNeedsLayout()
         layoutIfNeeded()
@@ -65,14 +75,8 @@ class TitileCollectionCell: UICollectionViewCell {
         contentView.addSubview(cover)
         cover.addSubview(gradientView)
         contentView.addSubview(title)
-        cover.frame = CGRect(x: 0, y: 0, width: contentView.bounds.width, height: contentView.bounds.height)
-        gradientView.frame = CGRect(x: 0,
-                                    y: contentView.bounds.height / 2,
-                                    width: contentView.bounds.width,
-                                    height: contentView.bounds.height / 2)
-        title.frame = CGRect(x: 0, y: 0, width: contentView.bounds.width - 10, height: contentView.bounds.height - 5)
- 
-        title.center.x = contentView.center.x
+
+        layer.backgroundColor = UIColor.white.cgColor
     }
     
     private func setupGradient() {
@@ -82,19 +86,7 @@ class TitileCollectionCell: UICollectionViewCell {
         gradient.endPoint = CGPoint(x: 0.5, y: 1.0)
         gradientView.layer.insertSublayer(gradient, at: 0)
     }
-    
-    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
 
-        let scale = newWidth / image.size.width
-        let newHeight = image.size.height * scale
-        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
-        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return newImage!
-    }
-    
 }
 
 
