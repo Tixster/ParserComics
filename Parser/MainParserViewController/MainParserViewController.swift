@@ -111,7 +111,7 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
         setupIndicator()
         setup()
         Task { [weak self] in
-            await self?.interactor?.makeRequest(request: .getNewMangaList)
+            await self?.interactor?.makeRequest(request: currentSortType.requestType)
         }
         view.backgroundColor = .white
         $isMangaDataUpdate
