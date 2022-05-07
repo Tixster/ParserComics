@@ -54,6 +54,13 @@ final class ReaderCollectionViewController: UIViewController {
     private let titleManga: String
     @Published private var pageText = "1"
     private var isPageSet: Bool = false
+    private let indicator: UIActivityIndicatorView = {
+        let indicator: UIActivityIndicatorView = .init(style: .large)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        indicator.startAnimating()
+        return indicator
+    }()
     
     private var numberPage: Int {
         get {
@@ -75,6 +82,7 @@ final class ReaderCollectionViewController: UIViewController {
                 collectionView.selectItem(at: .init(item: numberPage, section: 0), animated: false, scrollPosition: .centeredHorizontally)
                 collectionView.isPagingEnabled = true
                 pageLable.isHidden = false
+                indicator.stopAnimating()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
                     self?.isPageSet = true
                 }
@@ -132,6 +140,7 @@ final class ReaderCollectionViewController: UIViewController {
         view.addSubview(collectionView)
         view.backgroundColor = .black
         view.addSubview(pageLable)
+        view.addSubview(indicator)
         setupPageControl()
     }
     
@@ -172,6 +181,7 @@ final class ReaderCollectionViewController: UIViewController {
                                  width: view.bounds.width,
                                  height: 20)
         pageLable.center.x = view.center.x
+        indicator.center = view.center
     }
     
     func setupPageControl() {
