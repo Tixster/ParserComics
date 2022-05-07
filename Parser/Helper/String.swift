@@ -26,4 +26,8 @@ extension String {
         return intNumber ?? 0
     }
     
+    func localized() -> String {
+        return NSLocalizedString(self, comment: "")
+    }
+    
 }

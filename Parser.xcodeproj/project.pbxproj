@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A5966822826F919008A27BF /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5966812826F919008A27BF /* Endpoint.swift */; };
+		3A5966842826F9E5008A27BF /* HTTTPRequestMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5966832826F9E5008A27BF /* HTTTPRequestMethod.swift */; };
+		3A5966862826FAB5008A27BF /* HTTPRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5966852826FAB5008A27BF /* HTTPRequestError.swift */; };
+		3A5966882826FB81008A27BF /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5966872826FB81008A27BF /* HTTPClient.swift */; };
+		3A59668B282701C7008A27BF /* MangaEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A59668A282701C7008A27BF /* MangaEndpoint.swift */; };
+		3AA5B380282300A5009214DA /* SDWebImageFLPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 3AA5B37F282300A5009214DA /* SDWebImageFLPlugin */; };
+		3AA5B3862823046C009214DA /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3AA5B3852823046C009214DA /* SDWebImageWebPCoder */; };
+		3AA5B388282314D4009214DA /* ReaderCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA5B387282314D4009214DA /* ReaderCollectionViewController.swift */; };
+		3AA5B38A2823CF5C009214DA /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA5B3892823CF5C009214DA /* UserDefault.swift */; };
 		3E133947274935A400F871DD /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 3E133946274935A400F871DD /* SDWebImage */; };
 		3E45099427405B4A0061C4FF /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E45099327405B4A0061C4FF /* UIImage.swift */; };
 		3E54126C26FCF6E700CF8F5D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3E54126B26FCF6E700CF8F5D /* SnapKit */; };
@@ -43,6 +52,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A5966812826F919008A27BF /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		3A5966832826F9E5008A27BF /* HTTTPRequestMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTTPRequestMethod.swift; sourceTree = "<group>"; };
+		3A5966852826FAB5008A27BF /* HTTPRequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPRequestError.swift; sourceTree = "<group>"; };
+		3A5966872826FB81008A27BF /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		3A59668A282701C7008A27BF /* MangaEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MangaEndpoint.swift; sourceTree = "<group>"; };
+		3AA5B387282314D4009214DA /* ReaderCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderCollectionViewController.swift; sourceTree = "<group>"; };
+		3AA5B3892823CF5C009214DA /* UserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefault.swift; sourceTree = "<group>"; };
 		3E45099327405B4A0061C4FF /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		3E5D098C2744276700D25017 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3E9F153326E5129600AD65B7 /* Parser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Parser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,12 +101,41 @@
 				3E54126C26FCF6E700CF8F5D /* SnapKit in Frameworks */,
 				3E133947274935A400F871DD /* SDWebImage in Frameworks */,
 				3E54126F26FCF71F00CF8F5D /* SwiftSoup in Frameworks */,
+				3AA5B3862823046C009214DA /* SDWebImageWebPCoder in Frameworks */,
+				3AA5B380282300A5009214DA /* SDWebImageFLPlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A5966802826F8DF008A27BF /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3A5966812826F919008A27BF /* Endpoint.swift */,
+				3A5966832826F9E5008A27BF /* HTTTPRequestMethod.swift */,
+				3A5966852826FAB5008A27BF /* HTTPRequestError.swift */,
+				3A5966872826FB81008A27BF /* HTTPClient.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		3A596689282701B6008A27BF /* MangaEndpoint */ = {
+			isa = PBXGroup;
+			children = (
+				3A59668A282701C7008A27BF /* MangaEndpoint.swift */,
+			);
+			path = MangaEndpoint;
+			sourceTree = "<group>";
+		};
+		3AA5B381282300D4009214DA /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				3AA5B387282314D4009214DA /* ReaderCollectionViewController.swift */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
 		3E9F152A26E5129600AD65B7 = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +155,7 @@
 		3E9F153526E5129600AD65B7 /* Parser */ = {
 			isa = PBXGroup;
 			children = (
+				3AA5B381282300D4009214DA /* Reader */,
 				3E9F153626E5129600AD65B7 /* AppDelegate.swift */,
 				3E5D098C2744276700D25017 /* Constants.swift */,
 				3E9F155926E5220800AD65B7 /* NetworkAndParsingService */,
@@ -141,6 +187,8 @@
 		3E9F155926E5220800AD65B7 /* NetworkAndParsingService */ = {
 			isa = PBXGroup;
 			children = (
+				3A596689282701B6008A27BF /* MangaEndpoint */,
+				3A5966802826F8DF008A27BF /* Base */,
 				3E9F155A26E5229900AD65B7 /* ParsingService.swift */,
 				3E9F155C26E5245400AD65B7 /* NetworkDataFecther.swift */,
 				3E9F155E26E526CB00AD65B7 /* NetworkService.swift */,
@@ -221,6 +269,7 @@
 				3EB09831272B02D60034A570 /* AlertManager.swift */,
 				3E45099327405B4A0061C4FF /* UIImage.swift */,
 				3EA37A7E276F8F7C006EE18D /* String.swift */,
+				3AA5B3892823CF5C009214DA /* UserDefault.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -245,6 +294,8 @@
 				3E54126B26FCF6E700CF8F5D /* SnapKit */,
 				3E54126E26FCF71F00CF8F5D /* SwiftSoup */,
 				3E133946274935A400F871DD /* SDWebImage */,
+				3AA5B37F282300A5009214DA /* SDWebImageFLPlugin */,
+				3AA5B3852823046C009214DA /* SDWebImageWebPCoder */,
 			);
 			productName = Parser;
 			productReference = 3E9F153326E5129600AD65B7 /* Parser.app */;
@@ -277,6 +328,8 @@
 				3E54126A26FCF6E700CF8F5D /* XCRemoteSwiftPackageReference "SnapKit" */,
 				3E54126D26FCF71F00CF8F5D /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				3E133945274935A300F871DD /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				3AA5B37E282300A5009214DA /* XCRemoteSwiftPackageReference "SDWebImageFLPlugin" */,
+				3AA5B3842823046C009214DA /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
 			);
 			productRefGroup = 3E9F153426E5129600AD65B7 /* Products */;
 			projectDirPath = "";
@@ -306,10 +359,14 @@
 			files = (
 				3EBE8182272D587C00A4212D /* TitileCollectionCell.swift in Sources */,
 				3E45099427405B4A0061C4FF /* UIImage.swift in Sources */,
+				3A5966882826FB81008A27BF /* HTTPClient.swift in Sources */,
+				3A5966862826FAB5008A27BF /* HTTPRequestError.swift in Sources */,
+				3AA5B38A2823CF5C009214DA /* UserDefault.swift in Sources */,
 				3EA37A7B276F5051006EE18D /* DetailParserPresenter.swift in Sources */,
 				3E9F155F26E526CB00AD65B7 /* NetworkService.swift in Sources */,
 				3E9F155226E51FBD00AD65B7 /* MainParserPresenter.swift in Sources */,
 				3EA37A75276F4E2C006EE18D /* DetailParserRouter.swift in Sources */,
+				3A5966822826F919008A27BF /* Endpoint.swift in Sources */,
 				3EB09832272B02D60034A570 /* AlertManager.swift in Sources */,
 				3EFFBF8226FF71E30083CA56 /* MangaModels.swift in Sources */,
 				3E9F155326E51FBD00AD65B7 /* MainParserWorker.swift in Sources */,
@@ -319,7 +376,10 @@
 				3E9F155726E51FBD00AD65B7 /* MainParserInteractor.swift in Sources */,
 				3E9F155626E51FBD00AD65B7 /* MainParserViewController.swift in Sources */,
 				3E5D098D2744276700D25017 /* Constants.swift in Sources */,
+				3A5966842826F9E5008A27BF /* HTTTPRequestMethod.swift in Sources */,
 				3E9F155D26E5245400AD65B7 /* NetworkDataFecther.swift in Sources */,
+				3AA5B388282314D4009214DA /* ReaderCollectionViewController.swift in Sources */,
+				3A59668B282701C7008A27BF /* MangaEndpoint.swift in Sources */,
 				3E9F155B26E5229900AD65B7 /* ParsingService.swift in Sources */,
 				3ECC7227272D0B5400ABDA3C /* MainListTableView.swift.swift in Sources */,
 				3EA37A7F276F8F7C006EE18D /* String.swift in Sources */,
@@ -400,7 +460,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -455,7 +515,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -474,6 +534,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7MH8KA7J8V;
 				INFOPLIST_FILE = Parser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -495,6 +556,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7MH8KA7J8V;
 				INFOPLIST_FILE = Parser/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -531,6 +593,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3AA5B37E282300A5009214DA /* XCRemoteSwiftPackageReference "SDWebImageFLPlugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageFLPlugin.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.0;
+			};
+		};
+		3AA5B3842823046C009214DA /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageWebPCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.4;
+			};
+		};
 		3E133945274935A300F871DD /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
@@ -558,6 +636,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3AA5B37F282300A5009214DA /* SDWebImageFLPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3AA5B37E282300A5009214DA /* XCRemoteSwiftPackageReference "SDWebImageFLPlugin" */;
+			productName = SDWebImageFLPlugin;
+		};
+		3AA5B3852823046C009214DA /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3AA5B3842823046C009214DA /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
+		};
 		3E133946274935A400F871DD /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3E133945274935A300F871DD /* XCRemoteSwiftPackageReference "SDWebImage" */;

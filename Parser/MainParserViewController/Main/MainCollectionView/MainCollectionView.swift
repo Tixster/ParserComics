@@ -9,13 +9,15 @@ import UIKit
 
 class MainCollectionView: UICollectionView {
     
+    
     private var titles: [TitleModel]
     var currentIndexPathItem: Int
     var fetchNextTitles: (() -> Void)?
     var fetchMangaList: (() -> Void)?
+    var pushVc: ((UIViewController) -> Void)?
     private var isLoading = false
-    private let footerView = UIActivityIndicatorView(style: .white)
-    private var collectionViewRefreshControl: UIRefreshControl = {
+    private let footerView = UIActivityIndicatorView(style: .medium)
+    private lazy var collectionViewRefreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return control
@@ -80,6 +82,12 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let title = titles[indexPath.item]
+        let vc = ReaderCollectionViewController(link: title.link, title: title.title)
+        pushVc?(vc)
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

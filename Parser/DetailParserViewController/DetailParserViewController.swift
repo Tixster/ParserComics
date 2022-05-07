@@ -23,7 +23,10 @@ class DetailParserViewController: UIViewController, DetailParserDisplayLogic {
     }
     
     func displayData(viewModel: DetailParser.Model.ViewModel.ViewModelData) {
-        
+        switch viewModel {
+        case .displayDetailTitle(let data):
+            return
+        }
     }
     
     private func setup() {

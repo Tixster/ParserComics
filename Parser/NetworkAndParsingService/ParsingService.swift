@@ -14,14 +14,10 @@ enum ParseError: Error {
     case mangaLinstIsNill(String)
 }
 
-class ParsingService {
-    
-    static let shared = ParsingService()
-    
-    private init() {}
+final class ParsingService {
     
     /// Получение списка тайтлов
-    func fecthMangaList(url: URL) throws -> MangaData {
+    static func fecthMangaList(url: URL) throws -> MangaData {
         let html = try String(contentsOf: url, encoding: .utf8)
         do {
             let doc: Document = try SwiftSoup.parseBodyFragment(html)
@@ -50,7 +46,7 @@ class ParsingService {
                                             pages: pages))
             }
             let nextPage = try doc.select("div[id=pagination] a:contains(Вперед)").attr("href")
-            let mangaData = MangaData(titles: curTitles, nextPage: URL(string: Constants.SiteLinks.siteNewMangaPageURL + nextPage)!)
+            let mangaData = MangaData(titles: curTitles, nextPage: URL(string: url.absoluteString + nextPage)!)
             return mangaData
         } catch Exception.Error(type: let type, Message: let message){
             print("type: \(type), message: \(message)")
@@ -61,28 +57,32 @@ class ParsingService {
     }
     
     /// Получение следующей страницы с тайтлами
-    func fetchNextPageTitles(url: URL) -> MangaData? {
+    static func fetchNextPageTitles(url: URL) -> MangaData? {
         return try? fecthMangaList(url: url)
     }
     
-    func fecthDetailTitleInfo(for url: URL) {
+    static func fecthDetailTitleInfo(for url: URL) {
         
     }
     
     /**
-     Получение ссылок на скнаы
+     Получение ссылок на сканы
      - parameter url: Ссылка на вкладку, октрывающую читалку со страницами.
      - returns: Возвращает массив ссылок на сканы из главы
      */
-    func fetchMangaPagesLink(url: URL) -> [URL]? {
-        let html = try! String(contentsOf: url, encoding: .utf8)
+    static func fetchMangaPagesLink(url: URL) -> [URL]? {
+        var str = url.absoluteString
+        str = str.replacingOccurrences(of: "/manga/", with: "/online/")
+        let newUrl = URL(string: str)!
+        
+      //  let html = try! String(contentsOf: newUrl, encoding: .utf8)
         do {
-            let doc: Document = try SwiftSoup.parseBodyFragment(html)
-            let urlReader = try doc.select("div[id=manga_images] a").attr("href")
-            print("Manga Pages Link: \(urlReader)")
-            if let url = URL(string: urlReader) {
-                return try fetchPagesLink(url: url)
-            }
+            return try fetchPagesLink(url: newUrl)
+//            let doc: Document = try SwiftSoup.parseBodyFragment(html)
+//            let urlReader = try doc.select("div[id=manga_images] a").attr("href")
+//            print("Manga Pages Link: \(urlReader)")
+//            if let url = URL(string: urlReader) {
+//            }
         } catch Exception.Error(type: let type, Message: let message){
             print("type: \(type), message: \(message)")
         } catch {
@@ -92,7 +92,7 @@ class ParsingService {
     }
     
     /// Получение ссылок на страницы из манги по ссылке со страницы тайтла
-    private func fetchPagesLink(url: URL) throws -> [URL] {
+    private static func fetchPagesLink(url: URL) throws -> [URL] {
         let html = try! String(contentsOf: url, encoding: .utf8)
         do {
             let doc: Document = try SwiftSoup.parseBodyFragment(html)

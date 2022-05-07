@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Combine
 protocol MainParserPresentationLogic {
     func presentData(response: MainParser.Model.Response.ResponseType)
     var mangaDataLists: [TitleModel] { get set }
@@ -16,6 +16,10 @@ protocol MainParserPresentationLogic {
 class MainParserPresenter: MainParserPresentationLogic {
     weak var viewController: MainParserDisplayLogic?
     var mangaDataLists = [TitleModel]()
+    
+    init() {
+    
+    }
     
     func presentData(response: MainParser.Model.Response.ResponseType) {
         switch response {

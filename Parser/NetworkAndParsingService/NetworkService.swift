@@ -7,47 +7,60 @@
 
 import Foundation
 import Network
+import Combine
+
+enum NetworkError: Error {
+    case dontGetData(desc: String)
+    case customError(desc: String)
+}
 
 protocol Networking {
-    func request(url: URL, completion: @escaping (Result<Data, Error>) -> Void)
-    func requestMangaTitle(url: URL, completion: @escaping(Result<MangaData, Error>) -> Void)
+    func request(url: URL) async throws -> Data
+    func requestMangaTitle(url: URL) async throws -> MangaData
 }
 
 final class NetworkService {
     
     let session = URLSession.shared
     let monitor = NWPathMonitor()
+    var store: Set<AnyCancellable> = []
     
 }
 
 extension NetworkService: Networking {
-    func requestMangaTitle(url: URL, completion: @escaping (Result<MangaData, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            if let data = try? ParsingService.shared.fecthMangaList(url: url) {
-                completion(.success(data))
-            } else {
-                completion(.failure(ParseError.mangaLinstIsNill("Тайтлы не найдены")))
-            }
-        }
 
+    func requestMangaTitle(url: URL) async throws -> MangaData {
+        try await withCheckedThrowingContinuation({ continuation in
+            if let data = try? ParsingService.fecthMangaList(url: url) {
+                continuation.resume(returning: data)
+            } else {
+                continuation.resume(throwing: ParseError.mangaLinstIsNill("Тайтлы не найдены"))
+            }
+        })
     }
     
-    func request(url: URL, completion: @escaping (Result<Data, Error>) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.session.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    completion(.failure(error))
+    func request(url: URL) async throws -> Data {
+        try await withCheckedThrowingContinuation { continuation in
+            _ = session.dataTaskPublisher(for: url)
+                .receive(on: DispatchQueue.main)
+                .tryMap({ data, response -> Data in
+                    if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                        throw NetworkError.dontGetData(desc: "Ошибка HTTP: \(httpResponse.statusCode)")
+                    }
+                    return data
+                })
+                .sink { completion in
+                    switch completion {
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    case .finished:
+                        return
+                    }
+                } receiveValue: { data in
+                    print(Thread.isMainThread)
+                    continuation.resume(returning: data)
                 }
-                
-                guard let data = data else {
-                    print("Нет данных")
-                    return
-                }
-                completion(.success(data))
-            }.resume()
         }
     }
-    
     
 }

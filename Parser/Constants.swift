@@ -9,11 +9,13 @@ import UIKit
 
 struct Constants {
     
+    /// Ссылки сайтов для парсинга
     struct SiteLinks {
-        static let siteMainPageURL = "https://hentaichan.live"
-        static let siteNewMangaPageURL = "https://hentaichan.live/manga/new"
+        static let siteMainPageURL = "https://xxx.hentaichan.live/"
+        static let siteNewMangaPageURL = siteMainPageURL + "/manga/new"
     }
     
+    /// Размеры таблицы главного экрана
     struct MainTableView {
         static let heightTableViewMangaCell: CGFloat = UIScreen.main.bounds.height * 0.21
         static let widthTableViewMangaCell: CGFloat = UIScreen.main.bounds.width - ((UIScreen.main.bounds.width * 0.026) * 2)
@@ -21,6 +23,7 @@ struct Constants {
         static let widthCoverTableCell: CGFloat = widthTableViewMangaCell * 0.26
     }
     
+    /// Размеры коллекции главного экрана
     struct MainCollectionView {
         
         static let width = UIScreen.main.bounds.size.width - 3 * CGFloat(2 - 1)

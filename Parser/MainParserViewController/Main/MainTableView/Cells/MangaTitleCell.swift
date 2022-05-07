@@ -30,9 +30,17 @@ class MangaTitleCell: UITableViewCell {
         return lable
     }()
     
+    private var info: UILabel = {
+        let lable = UILabel()
+        lable.font = UIFont.systemFont(ofSize: 8, weight: .medium)
+        lable.textColor = .black
+        lable.numberOfLines = 1
+        return lable
+    }()
+    
     private var author: UILabel = {
         let lable = UILabel()
-        lable.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        lable.font = UIFont.systemFont(ofSize: 10, weight: .regular)
         lable.textColor = .darkGray
         lable.numberOfLines = 2
         return lable
@@ -105,6 +113,7 @@ class MangaTitleCell: UITableViewCell {
         self.author.text = "Автор: \(mangaModel.author)"
         self.descriptionTitle.text = mangaModel.description
         cover.sd_setImage(with: mangaModel.cover)
+        info.text = "Просмотры: \(mangaModel.views), Лайки: \(mangaModel.likes), Страниц: \(mangaModel.pages)"
     }
     
     private func setupFrameUI() {
@@ -134,13 +143,18 @@ class MangaTitleCell: UITableViewCell {
         bgDescriptionView.frame = CGRect(x: author.frame.minX,
                                          y: author.frame.maxY + Constants.MainTableView.widthCoverTableCell * 0.05,
                                          width: contentView.bounds.width - title.frame.minX - Constants.MainTableView.widthTableViewMangaCell * 0.08,
-                                         height: contentView.bounds.height - bgDescriptionView.frame.minY - Constants.MainTableView.widthCoverTableCell * 0.05)
+                                         height: contentView.bounds.height - bgDescriptionView.frame.minY - Constants.MainTableView.heightTableViewMangaCell * 0.07)
         bgDescriptionView.clipsToBounds = true
         
         descriptionTitle.frame = CGRect(x: 0,
                                         y: 0,
                                         width: bgDescriptionView.bounds.width,
                                         height: bgDescriptionView.bounds.height)
+        
+        info.frame = CGRect(x: bgDescriptionView.frame.minX,
+                            y: bgDescriptionView.frame.maxY + 2,
+                            width: bgDescriptionView.bounds.width,
+                            height: info.font.lineHeight)
         
     }
     
@@ -150,6 +164,7 @@ class MangaTitleCell: UITableViewCell {
         contentView.addSubview(title)
         contentView.addSubview(author)
         contentView.addSubview(bgDescriptionView)
+        contentView.addSubview(info)
         bgDescriptionView.addSubview(descriptionTitle)
     }
     

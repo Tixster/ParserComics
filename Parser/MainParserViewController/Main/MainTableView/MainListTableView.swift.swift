@@ -15,6 +15,7 @@ class MainListTableView: UITableView {
     private var isLoading = false
     var fetchNextTitles: (() -> Void)?
     var fetchMangaList: (() -> Void)?
+    var pushVc: ((UIViewController) -> Void)?
     private var tableViewRefreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -85,6 +86,12 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let title = titles[indexPath.item]
+        let vc = ReaderCollectionViewController(link: title.link, title: title.title)
+        pushVc?(vc)
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

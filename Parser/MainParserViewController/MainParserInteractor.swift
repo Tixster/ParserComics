@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MainParserBusinessLogic {
-    func makeRequest(request: MainParser.Model.Request.RequestType)
+    func makeRequest(request: MainParser.Model.Request.RequestType) async
 }
 
 class MainParserInteractor: MainParserBusinessLogic {
@@ -17,22 +17,24 @@ class MainParserInteractor: MainParserBusinessLogic {
     var presenter: MainParserPresentationLogic?
     var service: MainParserServiceLogic?
     
-    func makeRequest(request: MainParser.Model.Request.RequestType) {
+    func makeRequest(request: MainParser.Model.Request.RequestType) async  {
         if service == nil {
             service = MainParserService()
         }
-        
-        switch request {
-        case .getMangaList:
-            service?.getMangaTitle(url:  URL(string: Constants.SiteLinks.siteNewMangaPageURL)!) { [weak self] data in
-                self?.presenter?.presentData(response: .presentMangaData(data,true))
+
+        Task { [weak self] in
+            print(Thread.isMainThread)
+            switch request {
+            case .getNewMangaList, .getPopularMangaList, .getMostDownloadsMangaList, .getMostViewsMangaList:
+                if let mangaData = try? await self?.service?.getMangaTitle(with: request.endpoint.rawValue) {
+                    self?.presenter?.presentData(response: .presentMangaData(mangaData, true))
+                }
+            case .getNextMangaList:
+                if let nextMangaData = try? await self?.service?.getNextPangeMangaTitles() {
+                    self?.presenter?.presentData(response: .presentMangaData(nextMangaData, false))
+                }
             }
-        case .getNextMangaList:
-            service?.getNextPangeMangaTitles(completion: { mangaData in
-                self.presenter?.presentData(response: .presentMangaData(mangaData, false))
-            })
         }
-        
     }
     
 }
