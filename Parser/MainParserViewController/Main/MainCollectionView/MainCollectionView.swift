@@ -118,6 +118,7 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
 
 extension MainCollectionView: MainParserViewControllerDelegate {
     func sendMangaData(_ vc: UIViewController, data: [TitleModel]) {
+        
         titles = data
         isLoading = false
         DispatchQueue.main.async {
@@ -125,8 +126,7 @@ extension MainCollectionView: MainParserViewControllerDelegate {
             self.refreshControl?.endRefreshing()
         }
     }
-    
-    
+
 }
 
 public class CollectionViewFooterView: UICollectionReusableView {

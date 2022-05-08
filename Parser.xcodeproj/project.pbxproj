@@ -12,6 +12,7 @@
 		3A5966862826FAB5008A27BF /* HTTPRequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5966852826FAB5008A27BF /* HTTPRequestError.swift */; };
 		3A5966882826FB81008A27BF /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5966872826FB81008A27BF /* HTTPClient.swift */; };
 		3A59668B282701C7008A27BF /* MangaEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A59668A282701C7008A27BF /* MangaEndpoint.swift */; };
+		3A59668E2827DE6A008A27BF /* Zoomy in Frameworks */ = {isa = PBXBuildFile; productRef = 3A59668D2827DE6A008A27BF /* Zoomy */; };
 		3AA5B380282300A5009214DA /* SDWebImageFLPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 3AA5B37F282300A5009214DA /* SDWebImageFLPlugin */; };
 		3AA5B3862823046C009214DA /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3AA5B3852823046C009214DA /* SDWebImageWebPCoder */; };
 		3AA5B388282314D4009214DA /* ReaderCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA5B387282314D4009214DA /* ReaderCollectionViewController.swift */; };
@@ -101,6 +102,7 @@
 				3E54126C26FCF6E700CF8F5D /* SnapKit in Frameworks */,
 				3E133947274935A400F871DD /* SDWebImage in Frameworks */,
 				3E54126F26FCF71F00CF8F5D /* SwiftSoup in Frameworks */,
+				3A59668E2827DE6A008A27BF /* Zoomy in Frameworks */,
 				3AA5B3862823046C009214DA /* SDWebImageWebPCoder in Frameworks */,
 				3AA5B380282300A5009214DA /* SDWebImageFLPlugin in Frameworks */,
 			);
@@ -296,6 +298,7 @@
 				3E133946274935A400F871DD /* SDWebImage */,
 				3AA5B37F282300A5009214DA /* SDWebImageFLPlugin */,
 				3AA5B3852823046C009214DA /* SDWebImageWebPCoder */,
+				3A59668D2827DE6A008A27BF /* Zoomy */,
 			);
 			productName = Parser;
 			productReference = 3E9F153326E5129600AD65B7 /* Parser.app */;
@@ -330,6 +333,7 @@
 				3E133945274935A300F871DD /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				3AA5B37E282300A5009214DA /* XCRemoteSwiftPackageReference "SDWebImageFLPlugin" */,
 				3AA5B3842823046C009214DA /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
+				3A59668C2827DE6A008A27BF /* XCRemoteSwiftPackageReference "Zoomy" */,
 			);
 			productRefGroup = 3E9F153426E5129600AD65B7 /* Products */;
 			projectDirPath = "";
@@ -593,6 +597,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3A59668C2827DE6A008A27BF /* XCRemoteSwiftPackageReference "Zoomy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lvnkmn/Zoomy";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		3AA5B37E282300A5009214DA /* XCRemoteSwiftPackageReference "SDWebImageFLPlugin" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageFLPlugin.git";
@@ -636,6 +648,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3A59668D2827DE6A008A27BF /* Zoomy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A59668C2827DE6A008A27BF /* XCRemoteSwiftPackageReference "Zoomy" */;
+			productName = Zoomy;
+		};
 		3AA5B37F282300A5009214DA /* SDWebImageFLPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3AA5B37E282300A5009214DA /* XCRemoteSwiftPackageReference "SDWebImageFLPlugin" */;

@@ -16,7 +16,7 @@ protocol MainParserServiceLogic: AnyObject {
 class MainParserService: MainParserServiceLogic {
     
     private var fetcher: DataFetcher = NetworkDataFecther(networking: NetworkService())
-    private var nextPage: URL?
+    private var nextPageURL: URL?
 
     func getMangaTitle(with endpoint: String) async throws -> MangaData {
         let url: URL = .init(string: Constants.SiteLinks.siteMainPageURL + endpoint)!
@@ -25,7 +25,7 @@ class MainParserService: MainParserServiceLogic {
     }
     
     func getNextPangeMangaTitles() async throws -> MangaData {
-        guard let nextPage = nextPage else {
+        guard let nextPage = nextPageURL else {
             throw NetworkError.customError(desc: "Нет следующей страницы")
         }
         let data = try await getMangaData(with: nextPage)
@@ -36,7 +36,7 @@ class MainParserService: MainParserServiceLogic {
 private extension MainParserService {
     func getMangaData(with url: URL) async throws -> MangaData {
         let data = try await fetcher.getMangaList(url: url)
-        self.nextPage = data.nextPage
+        self.nextPageURL = data.nextPage
         return data
     }
 }

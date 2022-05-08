@@ -20,14 +20,14 @@ protocol MainParserDisplayLogic: AnyObject {
     func displayData(viewModel: MainParser.Model.ViewModel.ViewModelData)
 }
 
-class MainParserViewController: UIViewController, MainParserDisplayLogic {
+final class MainParserViewController: UIViewController, MainParserDisplayLogic {
     
-    var interactor: MainParserBusinessLogic?
-    var router: (NSObjectProtocol & MainParserRoutingLogic)?
+    private var interactor: MainParserBusinessLogic?
+    private var router: (NSObjectProtocol & MainParserRoutingLogic)?
 
-    var titles = [TitleModel]()
-    var currentIndex = 0
-    weak var delegate: MainParserViewControllerDelegate?
+    private var titles = [TitleModel]()
+    private var currentIndex = 0
+    public weak var delegate: MainParserViewControllerDelegate?
     private var store: Set<AnyCancellable> = []
     private var currentSortType: SortType {
         get {
@@ -128,13 +128,14 @@ class MainParserViewController: UIViewController, MainParserDisplayLogic {
                     indicator.startAnimating()
                 }
                 navigationItem.leftBarButtonItem?.isEnabled = isUpdate
+                navigationItem.rightBarButtonItem?.isEnabled = isUpdate
                 title = currentSortType.title
             }
             .store(in: &store)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.barStyle = .default
     }
@@ -261,8 +262,7 @@ private extension MainParserViewController {
         let sortNew: UIAction = .init(title: SortType.new.title) { action in
             Task { [weak self] in
                 guard self?.currentSortType != .new else { return }
-                self?.currentSortType = .new
-                self?.isMangaDataUpdate = false
+                self?.selectSort(.new)
                 await self?.interactor?.makeRequest(request: .getNewMangaList)
                 
             }
@@ -270,29 +270,39 @@ private extension MainParserViewController {
         let sortPopular: UIAction = .init(title: SortType.popular.title) { action in
             Task { [weak self] in
                 guard self?.currentSortType != .popular else { return }
-                self?.currentSortType = .popular
-                self?.isMangaDataUpdate = false
+                self?.selectSort(.popular)
                 await self?.interactor?.makeRequest(request: .getPopularMangaList)
             }
         }
         let sortViews: UIAction = .init(title: SortType.views.title) { action in
             Task { [weak self] in
                 guard self?.currentSortType != .views else { return }
-                self?.currentSortType = .views
-                self?.isMangaDataUpdate = false
+                self?.selectSort(.views)
                 await self?.interactor?.makeRequest(request: .getMostViewsMangaList)
             }
         }
         let sortDownload: UIAction = .init(title: SortType.download.title) { action in
             Task { [weak self] in
                 guard self?.currentSortType != .download else { return }
-                self?.currentSortType = .download
-                self?.isMangaDataUpdate = false
+                self?.selectSort(.download)
                 await self?.interactor?.makeRequest(request: .getMostDownloadsMangaList)
             }
         }
+        sortNew.attributes = .disabled
+        
         let menuItems: [UIAction] = [sortNew, sortPopular, sortViews, sortDownload]
         return menuItems
+    }
+    
+    func selectSort(_ sort: SortType) {
+        currentSortType = sort
+        isMangaDataUpdate = false
+        selectFirstIndex()
+    }
+    
+    func selectFirstIndex() {
+        collectionView?.selectItem(at: .init(item: 0, section: 0), animated: false, scrollPosition: .top)
+        tableView?.selectRow(at: .init(row: 0, section: 0), animated: false, scrollPosition: .top)
     }
     
 }
