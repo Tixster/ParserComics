@@ -25,3 +25,4 @@ struct NetworkDataFecther: DataFetcher, HTTPClient {
     }
 
 }
+

@@ -8,19 +8,22 @@
 import UIKit
 import SDWebImage
 import Combine
+import Zoomy
 
-class PageCell: UICollectionViewCell {
+final class PageCell: UICollectionViewCell {
     
     static let resuseID: String = String(describing: PageCell.self)
     
     private let imageView: UIImageView = {
         let view: UIImageView = .init()
         view.contentMode = .scaleAspectFit
-        view.enableZoom()
         view.sd_imageIndicator = SDWebImageActivityIndicator.whiteLarge
         return view
     }()
     
+    public var image: UIImageView {
+        return self.imageView
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,19 +52,22 @@ class PageCell: UICollectionViewCell {
 }
 
 final class ReaderCollectionViewController: UIViewController {
-    
+
+    // MARK: - Variables
+    @Published private var pageText = "1"
+    private var store: Set<AnyCancellable> = []
+
     private let link: URL
     private let titleManga: String
-    @Published private var pageText = "1"
     private var isPageSet: Bool = false
-    private let indicator: UIActivityIndicatorView = {
-        let indicator: UIActivityIndicatorView = .init(style: .large)
-        indicator.color = .white
-        indicator.hidesWhenStopped = true
-        indicator.startAnimating()
-        return indicator
-    }()
-    
+    private var imageURLs: [URL]? {
+        didSet {
+            updatePageData()
+        }
+    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
     private var numberPage: Int {
         get {
             UserDefaults.standard.integer(forKey: titleManga)
@@ -71,31 +77,23 @@ final class ReaderCollectionViewController: UIViewController {
         }
     }
     
-    private var imageURLs: [URL]? {
-        didSet {
-            DispatchQueue.main.async { [unowned self] in
-                collectionView.reloadData()
-                pageControl.numberOfPages = imageURLs?.count ?? 0
-                pageControl.currentPage = numberPage
-                pageLable.text = pageText + "\\" + "\(self.imageURLs?.count ?? 0)"
-                collectionView.isPagingEnabled = false
-                collectionView.selectItem(at: .init(item: numberPage, section: 0), animated: false, scrollPosition: .centeredHorizontally)
-                collectionView.isPagingEnabled = true
-                pageLable.isHidden = false
-                indicator.stopAnimating()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                    self?.isPageSet = true
-                }
-                print(numberPage)
-            }
-        }
-    }
-    
-    private var store: Set<AnyCancellable> = []
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .darkContent
-    }
-    
+    //MARK: - Views
+    private let indicator: UIActivityIndicatorView = {
+        let indicator: UIActivityIndicatorView = .init(style: .medium)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        indicator.startAnimating()
+        return indicator
+    }()
+    private var pagingView: UIView = .init(frame: .zero)
+    private var vStack: UIStackView = {
+        let vStack: UIStackView = .init(frame: .zero)
+        vStack.alignment = .center
+        vStack.axis = .vertical
+        vStack.distribution = .fill
+        vStack.spacing = .zero
+        return vStack
+    }()
     private let pageLable: UILabel = {
         let label: UILabel = .init(frame: .zero)
         label.isHidden = true
@@ -104,9 +102,7 @@ final class ReaderCollectionViewController: UIViewController {
         label.font = .systemFont(ofSize: 13)
         return label
     }()
-    
     private let pageControl: UIPageControl = .init(frame: .zero)
-    
     private lazy var collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = .init()
         layout.scrollDirection = .horizontal
@@ -135,13 +131,9 @@ final class ReaderCollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        overrideUserInterfaceStyle = .dark
-        navigationController?.navigationBar.isHidden = true
-        view.addSubview(collectionView)
         view.backgroundColor = .black
-        view.addSubview(pageLable)
-        view.addSubview(indicator)
-        setupPageControl()
+        addSubviews()
+        setupTargetPageControl()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -149,44 +141,84 @@ final class ReaderCollectionViewController: UIViewController {
         DispatchQueue.global(qos: .userInteractive).async {
             self.imageURLs = ParsingService.fetchMangaPagesLink(url: self.link)
         }
+        setupNavBar()
+        binding()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupLayout()
+    }
+
+}
+
+private extension ReaderCollectionViewController {
+    
+    /// call in viewDidAppear
+    func setupNavBar() {
+        overrideUserInterfaceStyle = .dark
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    func addSubviews() {
+        view.addSubview(collectionView)
+        view.addSubview(indicator)
+        view.addSubview(pagingView)
+        pagingView.addSubview(vStack)
+        vStack.addArrangedSubview(pageLable)
+        vStack.addArrangedSubview(pageControl)
+    }
+    
+    func setupLayout() {
+        collectionView.frame = view.bounds
+        pagingView.frame = .init(x: .zero, y: view.bounds.height - 60 - view.safeAreaInsets.bottom,
+                                 width: view.bounds.width,
+                                 height: 50)
+        vStack.frame = pagingView.bounds
+        indicator.center = view.center
+    }
+    
+    func binding() {
         $pageText
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] text in
                 self.pageLable.text = text + "\\" + "\(self.imageURLs?.count ?? 0)"
             }
             .store(in: &store)
-        pageControl.addTarget(self, action: #selector(valueChange), for: .valueChanged)
-        navigationController?.navigationBar.barStyle = .black
-        setNeedsStatusBarAppearanceUpdate()
     }
     
-    @objc private func valueChange(_ sender: UIPageControl) {
-        DispatchQueue.main.async {
-            self.collectionView.isPagingEnabled = false
-            self.collectionView.selectItem(at: .init(item: sender.currentPage, section: 0), animated: false, scrollPosition: .centeredHorizontally)
-            self.collectionView.isPagingEnabled = true
+    func updatePageData() {
+        DispatchQueue.main.async { [unowned self] in
+            collectionView.reloadData()
+            pageControl.numberOfPages = imageURLs?.count ?? 0
+            pageControl.currentPage = numberPage
+            pageLable.text = pageText + "\\" + "\(self.imageURLs?.count ?? 0)"
+            selectItem(at: .init(item: numberPage, section: 0))
+            pageLable.isHidden = false
+            indicator.stopAnimating()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.isPageSet = true
+            }
+            print(numberPage)
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
-        pageControl.frame = CGRect(x: .zero,
-                                   y: view.bounds.height - 60 - view.safeAreaInsets.bottom,
-                                   width: view.bounds.width,
-                                   height: 30)
-        pageControl.center.x = view.center.x
-        pageLable.frame = CGRect(x: .zero,
-                                 y: pageControl.frame.minY - 20,
-                                 width: view.bounds.width,
-                                 height: 20)
-        pageLable.center.x = view.center.x
-        indicator.center = view.center
+    func setupTargetPageControl() {
+        pageControl.addTarget(self, action: #selector(valueChangePageControl), for: .valueChanged)
     }
     
-    func setupPageControl() {
-        view.addSubview(pageControl)
-        view.bringSubviewToFront(pageControl)
+    @objc func valueChangePageControl(_ sender: UIPageControl) {
+        selectItem(at: .init(item: sender.currentPage, section: 0))
+    }
+    
+    func selectItem(at index: IndexPath) {
+        DispatchQueue.main.async {
+            self.collectionView.isPagingEnabled = false
+            self.collectionView.selectItem(at: index,
+                                           animated: false, scrollPosition: .centeredHorizontally)
+            self.collectionView.isPagingEnabled = true
+        }
     }
 
 }
@@ -194,7 +226,7 @@ final class ReaderCollectionViewController: UIViewController {
 extension ReaderCollectionViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let pageIndex = round(scrollView.contentOffset.x/view.frame.width)
+        let pageIndex = round(scrollView.contentOffset.x / view.frame.width)
         pageControl.currentPage = Int(pageIndex)
         pageText = "\(Int(pageIndex) + 1)"
         if isPageSet {
@@ -214,24 +246,9 @@ extension ReaderCollectionViewController: UICollectionViewDataSource, UICollecti
         }
         let imageURL = imageURLs[indexPath.item]
         cell.configure(imageURL: imageURL)
+        addZoombehavior(for: cell.image, below: pagingView)
         return cell
     }
     
     
-}
-
-extension UIImageView {
-  func enableZoom() {
-    let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(startZooming(_:)))
-    isUserInteractionEnabled = true
-    addGestureRecognizer(pinchGesture)
-  }
-
-  @objc
-  private func startZooming(_ sender: UIPinchGestureRecognizer) {
-    let scaleResult = sender.view?.transform.scaledBy(x: sender.scale, y: sender.scale)
-    guard let scale = scaleResult, scale.a > 1, scale.d > 1 else { return }
-    sender.view?.transform = scale
-    sender.scale = 1
-  }
 }

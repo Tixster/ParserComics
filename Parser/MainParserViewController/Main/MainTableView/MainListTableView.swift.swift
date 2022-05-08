@@ -135,7 +135,6 @@ extension MainListTableView: MainParserViewControllerDelegate {
             self.refreshControl?.endRefreshing()
             self.reloadData()
         }
-
     }
     
 }

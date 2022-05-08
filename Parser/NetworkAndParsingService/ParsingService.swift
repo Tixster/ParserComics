@@ -46,7 +46,8 @@ final class ParsingService {
                                             pages: pages))
             }
             let nextPage = try doc.select("div[id=pagination] a:contains(Вперед)").attr("href")
-            let mangaData = MangaData(titles: curTitles, nextPage: URL(string: url.absoluteString + nextPage)!)
+            let nextPageURL = url.absoluteString.replacingOccurrences(of: "\\?offset=\\w+", with: "", options: .regularExpression) + nextPage
+            let mangaData = MangaData(titles: curTitles, nextPage: URL(string: nextPageURL)!)
             return mangaData
         } catch Exception.Error(type: let type, Message: let message){
             print("type: \(type), message: \(message)")
