@@ -62,7 +62,9 @@ final class ReaderCollectionViewController: UIViewController {
     private var isPageSet: Bool = false
     private var imageURLs: [URL]? {
         didSet {
-            updatePageData()
+            DispatchQueue.main.async { [weak self] in
+                self?.updatePageData()
+            }
         }
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -136,12 +138,16 @@ final class ReaderCollectionViewController: UIViewController {
         setupTargetPageControl()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavBar()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DispatchQueue.global(qos: .userInteractive).async {
             self.imageURLs = ParsingService.fetchMangaPagesLink(url: self.link)
         }
-        setupNavBar()
         binding()
     }
 
@@ -154,7 +160,7 @@ final class ReaderCollectionViewController: UIViewController {
 
 private extension ReaderCollectionViewController {
     
-    /// call in viewDidAppear
+    /// call in viewWillAppear
     func setupNavBar() {
         overrideUserInterfaceStyle = .dark
         navigationController?.navigationBar.barStyle = .black
@@ -189,18 +195,15 @@ private extension ReaderCollectionViewController {
     }
     
     func updatePageData() {
-        DispatchQueue.main.async { [unowned self] in
-            collectionView.reloadData()
-            pageControl.numberOfPages = imageURLs?.count ?? 0
-            pageControl.currentPage = numberPage
-            pageLable.text = pageText + "\\" + "\(self.imageURLs?.count ?? 0)"
-            selectItem(at: .init(item: numberPage, section: 0))
-            pageLable.isHidden = false
-            indicator.stopAnimating()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.isPageSet = true
-            }
-            print(numberPage)
+        collectionView.reloadData()
+        pageControl.numberOfPages = imageURLs?.count ?? 0
+        pageControl.currentPage = numberPage
+        pageLable.text = pageText + "\\" + "\(self.imageURLs?.count ?? 0)"
+        selectItem(at: .init(item: numberPage, section: 0))
+        pageLable.isHidden = false
+        indicator.stopAnimating()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.isPageSet = true
         }
     }
     
