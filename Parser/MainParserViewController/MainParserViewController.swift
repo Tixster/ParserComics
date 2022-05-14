@@ -111,7 +111,7 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
         setupIndicator()
         setup()
         Task { [weak self] in
-            await self?.interactor?.makeRequest(request: currentSortType.requestType)
+            try? await self?.interactor?.makeRequest(request: currentSortType.requestType)
         }
         view.backgroundColor = .white
         $isMangaDataUpdate
@@ -180,12 +180,12 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
         }
         tableView.fetchNextTitles = { [unowned self] in
             Task {
-                await self.interactor?.makeRequest(request: .getNextMangaList)
+                try? await self.interactor?.makeRequest(request: .getNextMangaList)
             }
         }
         tableView.fetchMangaList = { [unowned self] in
             Task {
-                await self.interactor?.makeRequest(request: currentSortType.requestType)
+                try? await self.interactor?.makeRequest(request: currentSortType.requestType)
             }
         }
         tableView.snp.makeConstraints({
@@ -219,12 +219,12 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
         }
         collectionView.fetchNextTitles = { [unowned self] in
             Task {
-                await interactor?.makeRequest(request: .getNextMangaList)
+                try? await interactor?.makeRequest(request: .getNextMangaList)
             }
         }
         collectionView.fetchMangaList = { [unowned self] in
             Task {
-                await interactor?.makeRequest(request: currentSortType.requestType)
+                try? await interactor?.makeRequest(request: currentSortType.requestType)
             }
         }
     }
@@ -263,7 +263,7 @@ private extension MainParserViewController {
             Task { [weak self] in
                 guard self?.currentSortType != .new else { return }
                 self?.selectSort(.new)
-                await self?.interactor?.makeRequest(request: .getNewMangaList)
+                try? await self?.interactor?.makeRequest(request: .getNewMangaList)
                 
             }
         }
@@ -271,24 +271,23 @@ private extension MainParserViewController {
             Task { [weak self] in
                 guard self?.currentSortType != .popular else { return }
                 self?.selectSort(.popular)
-                await self?.interactor?.makeRequest(request: .getPopularMangaList)
+                try? await self?.interactor?.makeRequest(request: .getPopularMangaList)
             }
         }
         let sortViews: UIAction = .init(title: SortType.views.title) { action in
             Task { [weak self] in
                 guard self?.currentSortType != .views else { return }
                 self?.selectSort(.views)
-                await self?.interactor?.makeRequest(request: .getMostViewsMangaList)
+                try? await self?.interactor?.makeRequest(request: .getMostViewsMangaList)
             }
         }
         let sortDownload: UIAction = .init(title: SortType.download.title) { action in
             Task { [weak self] in
                 guard self?.currentSortType != .download else { return }
                 self?.selectSort(.download)
-                await self?.interactor?.makeRequest(request: .getMostDownloadsMangaList)
+                try? await self?.interactor?.makeRequest(request: .getMostDownloadsMangaList)
             }
         }
-        sortNew.attributes = .disabled
         
         let menuItems: [UIAction] = [sortNew, sortPopular, sortViews, sortDownload]
         return menuItems

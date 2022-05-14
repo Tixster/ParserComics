@@ -14,12 +14,43 @@ enum ParseError: Error {
     case mangaLinstIsNill(String)
 }
 
+extension ParseError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .linksPageIsNill(let string):
+            return string
+        case .mangaLinstIsNill(let string):
+            return string
+        }
+    }
+}
+
 final class ParsingService {
     
+    static private var session: URLSession = .shared
+    
+    static func getData(with url: URL)  async throws -> Data {
+        try await withCheckedThrowingContinuation({ continuaion in
+            DispatchQueue.global(qos: .unspecified).async {
+                let task = session.dataTask(with: url) { data, response, error in
+                    if let error = error {
+                        continuaion.resume(throwing: error)
+                    }
+                    if let data = data {
+                        print("📨 Data: -", data)
+                        continuaion.resume(returning: data)
+                    }
+                }
+                task.resume()
+            }
+        })
+    }
+    
     /// Получение списка тайтлов
-    static func fecthMangaList(url: URL) throws -> MangaData {
-        let html = try String(contentsOf: url, encoding: .utf8)
+    static func fecthMangaList(url: URL) async throws -> MangaData {
         do {
+            let data = try await getData(with: url)
+            let html = String(data: data, encoding: .utf8) ?? ""
             let doc: Document = try SwiftSoup.parseBodyFragment(html)
             let content = try doc.select("div[id=content]")
             let titleCount = try content.select("div.content_row")
@@ -53,13 +84,14 @@ final class ParsingService {
             print("type: \(type), message: \(message)")
         } catch {
             print(error.localizedDescription)
+            throw error
         }
         throw ParseError.mangaLinstIsNill("Список манги пустой")
     }
     
     /// Получение следующей страницы с тайтлами
-    static func fetchNextPageTitles(url: URL) -> MangaData? {
-        return try? fecthMangaList(url: url)
+    static func fetchNextPageTitles(url: URL) async throws -> MangaData? {
+        return try? await fecthMangaList(url: url)
     }
     
     static func fecthDetailTitleInfo(for url: URL) {

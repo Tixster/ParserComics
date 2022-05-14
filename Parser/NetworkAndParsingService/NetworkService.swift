@@ -30,13 +30,7 @@ final class NetworkService {
 extension NetworkService: Networking {
 
     func requestMangaTitle(url: URL) async throws -> MangaData {
-        try await withCheckedThrowingContinuation({ continuation in
-            if let data = try? ParsingService.fecthMangaList(url: url) {
-                continuation.resume(returning: data)
-            } else {
-                continuation.resume(throwing: ParseError.mangaLinstIsNill("Тайтлы не найдены"))
-            }
-        })
+        try await ParsingService.fecthMangaList(url: url)
     }
     
     func request(url: URL) async throws -> Data {

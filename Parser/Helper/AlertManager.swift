@@ -10,13 +10,36 @@ import UIKit
 
 class AlertManager {
     
+    static func errorAlert(with error: Error, okHandler: ((UIAlertAction) -> Void)? = nil) {
+        DispatchQueue.main.async {
+            let alert = createAlert(title: "Error",
+                                    message: error.localizedDescription,
+                                    okButton: "Обновить",
+                                    okHandler: okHandler)
+            alert.show()
+        }
+    }
+    
     static func noInternetAlert() {
-        let alertVC = UIAlertController(title: "Нет сети".localized(),
-                                        message: "Пожалуйста, проверте подключение к сети.".localized(),
+        DispatchQueue.main.async {
+            let alert = createAlert(title: "Нет сети".localized(),
+                                    message: "Пожалуйста, проверте подключение к сети.".localized())
+            alert.show()
+        }
+    }
+    
+    private static func createAlert(
+        title: String,
+        message: String,
+        okButton: String? = nil,
+        okHandler: ((UIAlertAction) -> Void)? = nil
+    ) -> UIAlertController {
+        let alertVC = UIAlertController(title: title,
+                                        message: message,
                                         preferredStyle: .alert)
-        let actionCanel = UIAlertAction(title: "ОК", style: .cancel, handler: nil)
+        let actionCanel = UIAlertAction(title: okButton ?? "OK", style: .cancel, handler: okHandler)
         alertVC.addAction(actionCanel)
-        alertVC.show()
+        return alertVC
     }
     
 }

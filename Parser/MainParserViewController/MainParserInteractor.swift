@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MainParserBusinessLogic {
-    func makeRequest(request: MainParser.Model.Request.RequestType) async
+    func makeRequest(request: MainParser.Model.Request.RequestType) async throws
 }
 
 class MainParserInteractor: MainParserBusinessLogic {
@@ -17,23 +17,42 @@ class MainParserInteractor: MainParserBusinessLogic {
     var presenter: MainParserPresentationLogic?
     var service: MainParserServiceLogic?
     
-    func makeRequest(request: MainParser.Model.Request.RequestType) async  {
+    func makeRequest(request: MainParser.Model.Request.RequestType) async throws  {
         if service == nil {
             service = MainParserService()
         }
-
-        Task { [weak self] in
-            print(Thread.isMainThread)
+        
+        Task { [unowned self] in
             switch request {
             case .getNewMangaList, .getPopularMangaList, .getMostDownloadsMangaList, .getMostViewsMangaList:
-                if let mangaData = try? await self?.service?.getMangaTitle(with: request.endpoint.rawValue) {
-                    self?.presenter?.presentData(response: .presentMangaData(mangaData, true))
+                do {
+                    let mangaData = try await self.service!.getMangaTitle(with: request.endpoint.rawValue)
+                    self.presenter!.presentData(response: .presentMangaData(mangaData, true))
+                } catch {
+                    AlertManager.errorAlert(with: error) { [weak self] _ in
+                        guard let strongSelf = self else { return }
+                        Task {
+                            try? await strongSelf.makeRequest(request: request)
+                        }
+                    }
                 }
+                
             case .getNextMangaList:
-                if let nextMangaData = try? await self?.service?.getNextPangeMangaTitles() {
-                    self?.presenter?.presentData(response: .presentMangaData(nextMangaData, false))
+                do {
+                    let nextMangaData = try await self.service!.getNextPangeMangaTitles()
+                    self.presenter!.presentData(response: .presentMangaData(nextMangaData, false))
+                } catch {
+                    AlertManager.errorAlert(with: error) { [weak self] _ in
+                        guard let strongSelf = self else { return }
+                        Task {
+                            try? await strongSelf.makeRequest(request: request)
+                        }
+                    }
                 }
+                
+                
             }
+            
         }
     }
     
