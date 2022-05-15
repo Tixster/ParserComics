@@ -8,13 +8,13 @@
 import UIKit
 
 class MainCollectionView: UICollectionView {
-    
-    
+
+    public var currentIndexPathItem: Int
+    public var fetchNextTitles: (() -> Void)?
+    public var fetchMangaList: (() -> Void)?
+    public var pushVc: ((UIViewController) -> Void)?
+
     private var titles: [TitleModel]
-    var currentIndexPathItem: Int
-    var fetchNextTitles: (() -> Void)?
-    var fetchMangaList: (() -> Void)?
-    var pushVc: ((UIViewController) -> Void)?
     private var isLoading = false
     private let footerView = UIActivityIndicatorView(style: .medium)
     private lazy var collectionViewRefreshControl: UIRefreshControl = {
@@ -22,7 +22,7 @@ class MainCollectionView: UICollectionView {
         control.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return control
     }()
-    
+
     init(titles: [TitleModel], currentIndexPathItem: Int) {
         let myLayout = UICollectionViewFlowLayout()
         myLayout.sectionInset = UIEdgeInsets(top: 10, left: 5, bottom: 5, right: 5)
@@ -38,11 +38,11 @@ class MainCollectionView: UICollectionView {
         super.init(frame: .zero, collectionViewLayout: myLayout)
         setupCollection()
     }
-    
+
     private func stupLayout() {
-        
+
     }
-    
+
     private func setupCollection() {
         delegate = self
         dataSource = self
@@ -53,7 +53,7 @@ class MainCollectionView: UICollectionView {
         refreshControl = collectionViewRefreshControl
         scrollToItem(at: IndexPath(item: currentIndexPathItem, section: 0), at: .top, animated: false)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -62,19 +62,21 @@ class MainCollectionView: UICollectionView {
     private func refresh() {
         fetchMangaList?()
     }
-    
+
     deinit {
         print("deinit collection")
     }
-    
+
 }
 
-extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
+extension MainCollectionView: UICollectionViewDelegate,
+                              UICollectionViewDataSource,
+                              UICollectionViewDelegateFlowLayout {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return titles.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TitileCollectionCell.resueID, for: indexPath) as? TitileCollectionCell {
             currentIndexPathItem = indexPath.item
@@ -83,16 +85,18 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
         }
         return UICollectionViewCell()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let title = titles[indexPath.item]
         let vc = ReaderCollectionViewController(link: title.link, title: title.title)
         pushVc?(vc)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
-            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath)
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                         withReuseIdentifier: "Footer",
+                                                                         for: indexPath)
             footer.addSubview(footerView)
             footerView.frame = CGRect(x: 0, y: 0, width: collectionView.bounds.width, height: 50)
             footerView.color = .black
@@ -101,12 +105,12 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
         }
         return UICollectionReusableView()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 
     }
     func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView
-                        view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+    view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         if elementKind == UICollectionView.elementKindSectionFooter {
             if !isLoading {
                 fetchNextTitles?()
@@ -118,7 +122,7 @@ extension MainCollectionView: UICollectionViewDelegate, UICollectionViewDataSour
 
 extension MainCollectionView: MainParserViewControllerDelegate {
     func sendMangaData(_ vc: UIViewController, data: [TitleModel]) {
-        
+
         titles = data
         isLoading = false
         DispatchQueue.main.async {
@@ -133,7 +137,7 @@ public class CollectionViewFooterView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -49,10 +49,10 @@ extension MainParser.Model.Request.RequestType {
 }
 
 enum SortType: String {
-    case new = "manga/new"
-    case popular = "mostfavorites&sort=manga"
-    case download = "mostdownloads&sort=manga"
-    case views = "mostviews&sort=manga"
+    case new = "/manga/new"
+    case popular = "/mostfavorites&sort=manga"
+    case download = "/mostdownloads&sort=manga"
+    case views = "/mostviews&sort=manga"
     case none
     
     var title: String {

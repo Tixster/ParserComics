@@ -11,8 +11,7 @@ struct Constants {
     
     /// Ссылки сайтов для парсинга
     struct SiteLinks {
-        static let siteMainPageURL = "https://xxx.hentaichan.live/"
-        static let siteNewMangaPageURL = siteMainPageURL + "/manga/new"
+        static let siteMainPageURL = "https://xxx.hentaichan.live"
     }
     
     /// Размеры таблицы главного экрана

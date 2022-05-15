@@ -11,7 +11,6 @@ import SnapKit
 
 class LoadingCell: UITableViewCell {
 
-    static let reuseID = "LoadingCell"
     private let bgView = UIView()
     private let indicator = UIActivityIndicatorView()
     

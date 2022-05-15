@@ -13,13 +13,13 @@ protocol DataFetcher {
 }
 
 struct NetworkDataFecther: DataFetcher, HTTPClient {
-    
+
     let networking: Networking
-    
+
     init(networking: Networking) {
         self.networking = networking
     }
-    
+
     func getMangaList(url: URL) async throws -> MangaData {
         return try await networking.requestMangaTitle(url: url)
     }

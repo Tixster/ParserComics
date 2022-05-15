@@ -21,13 +21,14 @@ protocol MainParserDisplayLogic: AnyObject {
 }
 
 final class MainParserViewController: UIViewController, MainParserDisplayLogic {
-    
+
+    public weak var delegate: MainParserViewControllerDelegate?
+
     private var interactor: MainParserBusinessLogic?
     private var router: (NSObjectProtocol & MainParserRoutingLogic)?
 
     private var titles = [TitleModel]()
     private var currentIndex = 0
-    public weak var delegate: MainParserViewControllerDelegate?
     private var store: Set<AnyCancellable> = []
     private var currentSortType: SortType {
         get {
@@ -48,7 +49,7 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
     }
     private var tableView: MainListTableView? {
         didSet {
-            if collectionView == nil  && tableView == nil {
+            if collectionView == nil && tableView == nil {
                 collectionView = MainCollectionView(titles: titles, currentIndexPathItem: currentIndex)
                 setupCollectionView()
             }
@@ -61,86 +62,53 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
     private var isCollectionViewActive = false
     private var isTitlesFetched = false
     private var isTableEnabled: Bool {
-        get {
-            return UserDefaults.standard.bool(forKey: "isTableEnabled")
-        }
-        
-        set {
-            UserDefaults.standard.set(newValue, forKey: "isTableEnabled")
-        }
+        get { UserDefaults.standard.bool(forKey: "isTableEnabled") }
+        set { UserDefaults.standard.set(newValue, forKey: "isTableEnabled") }
     }
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
     }
 
-    
     // MARK: - Setup
-    
     private func setup() {
-        let viewController        = self
-        let interactor            = MainParserInteractor()
-        let presenter             = MainParserPresenter()
-        let router                = MainParserRouter()
+        let viewController = self
+        let interactor = MainParserInteractor()
+        let presenter = MainParserPresenter()
+        let router = MainParserRouter()
         viewController.interactor = interactor
-        viewController.router     = router
-        interactor.presenter      = presenter
-        presenter.viewController  = viewController
-        router.viewController     = viewController
+        viewController.router = router
+        interactor.presenter = presenter
+        presenter.viewController = viewController
+        router.viewController = viewController
     }
-    
+
     // MARK: Routing
-    
+
     func rout() {
-        
+
     }
-    
+
     // MARK: View lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = false
-        
-        title = currentSortType.title
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.dash"),
-                                                            style: .plain,
-                                                            target: self,
-                                                            action: #selector(changeList))
-        let menu: UIMenu = .init(title: "Sort", image: nil, options: .displayInline, children: getMenuItems())
-        navigationItem.leftBarButtonItem = .init(image: UIImage(systemName: "arrow.up.arrow.down.square"), menu: menu)
+        setupNavigationBar()
         setupIndicator()
         setup()
+        binding()
         Task { [weak self] in
             try? await self?.interactor?.makeRequest(request: currentSortType.requestType)
         }
-        view.backgroundColor = .white
-        $isMangaDataUpdate
-            .receive(on: DispatchQueue.main)
-            .sink { [unowned self] isUpdate in
-                if isUpdate {
-                    collectionView?.isHidden = !isCollectionViewActive
-                    tableView?.isHidden = !isTableViewActive
-                    indicator.stopAnimating()
-                } else {
-                    collectionView?.isHidden = isCollectionViewActive
-                    tableView?.isHidden = isTableViewActive
-                    indicator.isHidden = false
-                    indicator.startAnimating()
-                }
-                navigationItem.leftBarButtonItem?.isEnabled = isUpdate
-                navigationItem.rightBarButtonItem?.isEnabled = isUpdate
-                title = currentSortType.title
-            }
-            .store(in: &store)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         navigationController?.navigationBar.barStyle = .default
     }
 
-    func displayData(viewModel: MainParser.Model.ViewModel.ViewModelData) {
+    public func displayData(viewModel: MainParser.Model.ViewModel.ViewModelData) {
         switch viewModel {
         case .displayMangaData(let mangaData):
             print(mangaData)
@@ -166,8 +134,124 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
             }
         }
     }
-    
-    private func setupTableView() {
+
+}
+
+private extension MainParserViewController {
+
+    func setupNavigationBar() {
+        navigationController?.navigationBar.isHidden = false
+        title = currentSortType.title
+        let menu: UIMenu = .init(title: "Sort", image: nil,
+                                 options: .displayInline,
+                                 children: getMenuItems())
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "list.dash"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(changeList))
+        navigationItem.leftBarButtonItem = .init(image: UIImage(systemName: "arrow.up.arrow.down.square"),
+                                                 menu: menu)
+        view.backgroundColor = .white
+    }
+
+    @objc
+    func changeList() {
+        if tableView != nil {
+            self.currentIndex = tableView?.currentIndexPathRow ?? 0
+            tableView?.removeFromSuperview()
+            tableView = nil
+            isTableViewActive = false
+        } else {
+            self.currentIndex = collectionView?.currentIndexPathItem ?? 0
+            collectionView?.removeFromSuperview()
+            collectionView = nil
+            isCollectionViewActive = false
+        }
+    }
+
+    func binding() {
+        $isMangaDataUpdate
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] isUpdate in
+            if isUpdate {
+                collectionView?.isHidden = !isCollectionViewActive
+                tableView?.isHidden = !isTableViewActive
+                indicator.stopAnimating()
+            } else {
+                collectionView?.isHidden = isCollectionViewActive
+                tableView?.isHidden = isTableViewActive
+                indicator.isHidden = false
+                indicator.startAnimating()
+            }
+            navigationItem.leftBarButtonItem?.isEnabled = isUpdate
+            navigationItem.rightBarButtonItem?.isEnabled = isUpdate
+            title = currentSortType.title
+        }
+            .store(in: &store)
+    }
+
+    func getMenuItems() -> [UIAction] {
+        let sortNew: UIAction = .init(title: SortType.new.title) { action in
+            Task { [weak self] in
+                guard self?.currentSortType != .new else { return }
+                self?.selectSort(.new)
+                try? await self?.interactor?.makeRequest(request: .getNewMangaList)
+
+            }
+        }
+        let sortPopular: UIAction = .init(title: SortType.popular.title) { action in
+            Task { [weak self] in
+                guard self?.currentSortType != .popular else { return }
+                self?.selectSort(.popular)
+                try? await self?.interactor?.makeRequest(request: .getPopularMangaList)
+            }
+        }
+        let sortViews: UIAction = .init(title: SortType.views.title) { action in
+            Task { [weak self] in
+                guard self?.currentSortType != .views else { return }
+                self?.selectSort(.views)
+                try? await self?.interactor?.makeRequest(request: .getMostViewsMangaList)
+            }
+        }
+        let sortDownload: UIAction = .init(title: SortType.download.title) { action in
+            Task { [weak self] in
+                guard self?.currentSortType != .download else { return }
+                self?.selectSort(.download)
+                try? await self?.interactor?.makeRequest(request: .getMostDownloadsMangaList)
+            }
+        }
+
+        let menuItems: [UIAction] = [sortNew, sortPopular, sortViews, sortDownload]
+        return menuItems
+    }
+
+    func selectSort(_ sort: SortType) {
+        currentSortType = sort
+        isMangaDataUpdate = false
+        selectFirstIndex()
+    }
+
+    func selectFirstIndex() {
+        collectionView?.selectItem(at: .init(item: 0, section: 0), animated: false, scrollPosition: .top)
+        tableView?.selectRow(at: .init(row: 0, section: 0), animated: false, scrollPosition: .top)
+    }
+
+}
+
+// MARK: - Setup Views
+private extension MainParserViewController {
+
+    func setupIndicator() {
+        view.addSubview(indicator)
+        indicator.color = .black
+        indicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.height.width.equalTo(30)
+        }
+        indicator.startAnimating()
+    }
+
+    func setupTableView() {
         guard !isTableViewActive else { return }
         guard let tableView = tableView else { return }
         navigationItem.rightBarButtonItem?.image = .init(systemName: "square.grid.2x2.fill")
@@ -197,8 +281,8 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
         isTableEnabled = true
         isTableViewActive = true
     }
-    
-    private func setupCollectionView() {
+
+    func setupCollectionView() {
         guard !isCollectionViewActive else { return }
         guard let collectionView = collectionView else { return }
         view.addSubview(collectionView)
@@ -228,80 +312,5 @@ final class MainParserViewController: UIViewController, MainParserDisplayLogic {
             }
         }
     }
-    
-    private func setupIndicator() {
-        view.addSubview(indicator)
-        indicator.color = .black
-        indicator.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.height.width.equalTo(30)
-        }
-        indicator.startAnimating()
-    }
-    
-    @objc
-    private func changeList() {
-        if tableView != nil {
-            self.currentIndex = tableView?.currentIndexPathRow ?? 0
-            tableView?.removeFromSuperview()
-            tableView = nil
-            isTableViewActive = false
-        } else {
-            self.currentIndex = collectionView?.currentIndexPathItem ?? 0
-            collectionView?.removeFromSuperview()
-            collectionView = nil
-            isCollectionViewActive = false
-        }
-    }
-    
-}
 
-private extension MainParserViewController {
-    
-    func getMenuItems() -> [UIAction] {
-        let sortNew: UIAction = .init(title: SortType.new.title) { action in
-            Task { [weak self] in
-                guard self?.currentSortType != .new else { return }
-                self?.selectSort(.new)
-                try? await self?.interactor?.makeRequest(request: .getNewMangaList)
-                
-            }
-        }
-        let sortPopular: UIAction = .init(title: SortType.popular.title) { action in
-            Task { [weak self] in
-                guard self?.currentSortType != .popular else { return }
-                self?.selectSort(.popular)
-                try? await self?.interactor?.makeRequest(request: .getPopularMangaList)
-            }
-        }
-        let sortViews: UIAction = .init(title: SortType.views.title) { action in
-            Task { [weak self] in
-                guard self?.currentSortType != .views else { return }
-                self?.selectSort(.views)
-                try? await self?.interactor?.makeRequest(request: .getMostViewsMangaList)
-            }
-        }
-        let sortDownload: UIAction = .init(title: SortType.download.title) { action in
-            Task { [weak self] in
-                guard self?.currentSortType != .download else { return }
-                self?.selectSort(.download)
-                try? await self?.interactor?.makeRequest(request: .getMostDownloadsMangaList)
-            }
-        }
-        
-        let menuItems: [UIAction] = [sortNew, sortPopular, sortViews, sortDownload]
-        return menuItems
-    }
-    
-    func selectSort(_ sort: SortType) {
-        currentSortType = sort
-        isMangaDataUpdate = false
-        selectFirstIndex()
-    }
-    
-    func selectFirstIndex() {
-        collectionView?.selectItem(at: .init(item: 0, section: 0), animated: false, scrollPosition: .top)
-        tableView?.selectRow(at: .init(row: 0, section: 0), animated: false, scrollPosition: .top)
-    }
-    
 }

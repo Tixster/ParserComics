@@ -8,21 +8,21 @@
 import UIKit
 
 class MainListTableView: UITableView {
-    
+
     private var titles: [TitleModel]
-    var currentIndexPathRow: Int
-    private lazy var footerView = LoadingCell()
     private var isLoading = false
-    var fetchNextTitles: (() -> Void)?
-    var fetchMangaList: (() -> Void)?
-    var pushVc: ((UIViewController) -> Void)?
-    private var tableViewRefreshControl: UIRefreshControl = {
+    private lazy var footerView = LoadingCell()
+    private lazy var tableViewRefreshControl: UIRefreshControl = {
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(refresh), for: .valueChanged)
         return control
     }()
-    
-    
+
+    public var currentIndexPathRow: Int
+    public var fetchNextTitles: (() -> Void)?
+    public var fetchMangaList: (() -> Void)?
+    public var pushVc: ((UIViewController) -> Void)?
+
     init(titles: [TitleModel], currentIndexPathRow: Int, frame: CGRect, style: UITableView.Style) {
         self.titles = titles
         self.currentIndexPathRow = currentIndexPathRow
@@ -30,10 +30,11 @@ class MainListTableView: UITableView {
         setupTable()
         scrollToRow(at: IndexPath(row: currentIndexPathRow, section: 0), at: .top, animated: false)
     }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupTable() {
         delegate = self
         dataSource = self
@@ -44,24 +45,24 @@ class MainListTableView: UITableView {
         tableFooterView = UIView()
         refreshControl = tableViewRefreshControl
     }
-    
+
     @objc
     private func refresh() {
         fetchMangaList?()
     }
-    
+
     deinit {
         print(#function)
     }
-    
+
 }
 
 extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return titles.count
@@ -69,7 +70,7 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
         default: return 0
         }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
@@ -85,16 +86,17 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
         default:
             return UITableViewCell()
         }
-        
+
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let title = titles[indexPath.item]
         let vc = ReaderCollectionViewController(link: title.link, title: title.title)
         pushVc?(vc)
     }
 
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 1:
             if !isLoading {
@@ -106,28 +108,30 @@ extension MainListTableView: UITableViewDelegate, UITableViewDataSource {
         default:
             return
         }
-        
+
     }
-    
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
+                   forRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             if let cell = cell as? LoadingCell {
                 cell.stop()
             }
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return Constants.MainTableView.heightTableViewMangaCell
         }
-        
+
         return 50
     }
-    
+
 }
 
 extension MainListTableView: MainParserViewControllerDelegate {
+
     func sendMangaData(_ vc: UIViewController, data: [TitleModel]) {
         titles = data
         isLoading = false
@@ -136,5 +140,5 @@ extension MainListTableView: MainParserViewControllerDelegate {
             self.reloadData()
         }
     }
-    
+
 }

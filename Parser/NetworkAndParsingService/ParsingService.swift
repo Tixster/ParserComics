@@ -26,12 +26,12 @@ extension ParseError: LocalizedError {
 }
 
 final class ParsingService {
-    
-    static private var session: URLSession = .shared
-    
-    static func getData(with url: URL)  async throws -> Data {
+
+    private static var session: URLSession = .shared
+
+    private static func getData(with url: URL) async throws -> Data {
         try await withCheckedThrowingContinuation({ continuaion in
-            DispatchQueue.global(qos: .unspecified).async {
+            DispatchQueue.global(qos: .userInteractive).async {
                 let task = session.dataTask(with: url) { data, response, error in
                     if let error = error {
                         continuaion.resume(throwing: error)
@@ -45,7 +45,7 @@ final class ParsingService {
             }
         })
     }
-    
+
     /// Получение списка тайтлов
     static func fecthMangaList(url: URL) async throws -> MangaData {
         do {
@@ -65,8 +65,12 @@ final class ParsingService {
                 let likes = titleInfo.getNumbers(pattern: "\\d+(?=\\s*плюсик)")
                 let views = titleInfo.getNumbers(pattern: "\\d+(?=\\s*просмотр)")
                 let pages = titleInfo.getNumbers(pattern: "\\d+(?=\\s*страниц)")
-                let originalBlurCover = coverManga.replacingOccurrences(of: "_thumbs_blur\\w*", with: "", options: [.regularExpression])
-                let originalCover = originalBlurCover.replacingOccurrences(of: "_thumbs\\w*", with: "", options: [.regularExpression])
+                let originalBlurCover = coverManga.replacingOccurrences(of: "_thumbs_blur\\w*",
+                                                                        with: "",
+                                                                        options: [.regularExpression])
+                let originalCover = originalBlurCover.replacingOccurrences(of: "_thumbs\\w*",
+                                                                           with: "",
+                                                                           options: [.regularExpression])
                 curTitles.append(TitleModel(title: titleManga,
                                             cover: URL(string: originalCover)!,
                                             description: descriptionManga,
@@ -80,7 +84,7 @@ final class ParsingService {
             let nextPageURL = url.absoluteString.replacingOccurrences(of: "\\?offset=\\w+", with: "", options: .regularExpression) + nextPage
             let mangaData = MangaData(titles: curTitles, nextPage: URL(string: nextPageURL)!)
             return mangaData
-        } catch Exception.Error(type: let type, Message: let message){
+        } catch Exception.Error(type: let type, Message: let message) {
             print("type: \(type), message: \(message)")
         } catch {
             print(error.localizedDescription)
@@ -88,16 +92,16 @@ final class ParsingService {
         }
         throw ParseError.mangaLinstIsNill("Список манги пустой")
     }
-    
+
     /// Получение следующей страницы с тайтлами
     static func fetchNextPageTitles(url: URL) async throws -> MangaData? {
         return try? await fecthMangaList(url: url)
     }
-    
+
     static func fecthDetailTitleInfo(for url: URL) {
-        
+
     }
-    
+
     /**
      Получение ссылок на сканы
      - parameter url: Ссылка на вкладку, октрывающую читалку со страницами.
@@ -107,8 +111,8 @@ final class ParsingService {
         var str = url.absoluteString
         str = str.replacingOccurrences(of: "/manga/", with: "/online/")
         let newUrl = URL(string: str)!
-        
-      //  let html = try! String(contentsOf: newUrl, encoding: .utf8)
+
+        //  let html = try! String(contentsOf: newUrl, encoding: .utf8)
         do {
             return try fetchPagesLink(url: newUrl)
 //            let doc: Document = try SwiftSoup.parseBodyFragment(html)
@@ -116,25 +120,25 @@ final class ParsingService {
 //            print("Manga Pages Link: \(urlReader)")
 //            if let url = URL(string: urlReader) {
 //            }
-        } catch Exception.Error(type: let type, Message: let message){
+        } catch Exception.Error(type: let type, Message: let message) {
             print("type: \(type), message: \(message)")
         } catch {
             print(error.localizedDescription)
         }
         return nil
     }
-    
+
     /// Получение ссылок на страницы из манги по ссылке со страницы тайтла
     private static func fetchPagesLink(url: URL) throws -> [URL] {
         let html = try! String(contentsOf: url, encoding: .utf8)
         do {
             let doc: Document = try SwiftSoup.parseBodyFragment(html)
             let shtml = try doc.getElementsByTag("script").get(2).outerHtml()
-            
+
             let pattern = #"\{[\w\W]+?"fullimg":\s*(\[[^\]]+\])\s*\}"#
             let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive)
-            
-            if let match = regex?.firstMatch(in:  shtml, options: [], range: NSRange(location: 0, length: shtml.utf16.count)) {
+
+            if let match = regex?.firstMatch(in: shtml, options: [], range: NSRange(location: 0, length: shtml.utf16.count)) {
                 if let links = Range(match.range(at: 1), in: shtml) {
                     let link = String(shtml[links])
                     let linksArray = link.replacingOccurrences(of: "[\'\\[\\]]",
@@ -152,6 +156,6 @@ final class ParsingService {
         }
         throw ParseError.linksPageIsNill("Ссылки на страницы не найдены")
     }
-    
+
 }
 
