@@ -29,12 +29,11 @@ class MainParserInteractor: MainParserBusinessLogic {
                     let mangaData = try await self.service!.getMangaTitle(with: request.endpoint.rawValue)
                     self.presenter!.presentData(response: .presentMangaData(mangaData, true))
                 } catch {
-                    AlertManager.errorAlert(with: error) { [weak self] _ in
-                        guard let strongSelf = self else { return }
-                        Task {
-                            try? await strongSelf.makeRequest(request: request)
-                        }
-                    }
+                    AlertManager.errorAlert(with: error, okHandler: { [weak self] _ in
+                        self?.showEditLinkAlert(with: request)
+                    }, secondButton: AlertManager.addChangeMangaLinkAction { [weak self] in
+                        self?.showEditLinkAlert(with: request)
+                    })
                 }
                 
             case .getNextMangaList:
@@ -42,17 +41,27 @@ class MainParserInteractor: MainParserBusinessLogic {
                     let nextMangaData = try await self.service!.getNextPangeMangaTitles()
                     self.presenter!.presentData(response: .presentMangaData(nextMangaData, false))
                 } catch {
-                    AlertManager.errorAlert(with: error) { [weak self] _ in
-                        guard let strongSelf = self else { return }
-                        Task {
-                            try? await strongSelf.makeRequest(request: request)
-                        }
-                    }
+                    AlertManager.errorAlert(with: error, okHandler: { [weak self] _ in
+                        self?.showEditLinkAlert(with: request)
+                    }, secondButton: AlertManager.addChangeMangaLinkAction { [weak self] in
+                        self?.showEditLinkAlert(with: request)
+                    })
                 }
-                
-                
             }
             
+        }
+    }
+    
+}
+
+private extension MainParserInteractor {
+    
+    func showEditLinkAlert(with request: MainParser.Model.Request.RequestType) {
+        AlertManager.editLinkAlert { [weak self] in
+            guard let strongSelf = self else { return }
+            Task {
+                try? await strongSelf.makeRequest(request: request)
+            }
         }
     }
     

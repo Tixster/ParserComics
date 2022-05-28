@@ -149,9 +149,24 @@ private extension MainParserViewController {
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(changeList))
-        navigationItem.leftBarButtonItem = .init(image: UIImage(systemName: "arrow.up.arrow.down.square"),
-                                                 menu: menu)
+        let oneLeftBarButtonItem: UIBarButtonItem = .init(image: UIImage(systemName: "arrow.up.arrow.down.square"),
+                                                          menu: menu)
+        let twoLeftBarButtonItem: UIBarButtonItem = .init(image: .init(systemName: "pencil.circle"),
+                                                          style: .plain,
+                                                          target: self,
+                                                          action: #selector(updateLink))
+        navigationItem.leftBarButtonItems = [oneLeftBarButtonItem, twoLeftBarButtonItem]
         view.backgroundColor = .white
+    }
+    
+    @objc
+    func updateLink() {
+        AlertManager.editLinkAlert {
+            Task {
+                self.isMangaDataUpdate = false
+                try? await self.interactor?.makeRequest(request: self.currentSortType.requestType)
+            }
+        }
     }
 
     @objc

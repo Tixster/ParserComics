@@ -10,14 +10,43 @@ import UIKit
 
 class AlertManager {
     
-    static func errorAlert(with error: Error, okHandler: ((UIAlertAction) -> Void)? = nil) {
+    static func errorAlert(
+        with error: Error,
+        okHandler: ((UIAlertAction) -> Void)? = nil,
+        secondButton: UIAlertAction? = nil
+    ) {
         DispatchQueue.main.async {
             let alert = createAlert(title: "Error",
                                     message: error.localizedDescription,
                                     okButton: "Обновить",
-                                    okHandler: okHandler)
+                                    okHandler: okHandler,
+                                    secondButton: secondButton)
             alert.show()
         }
+    }
+    
+    static func editLinkAlert(updateHandler: @escaping () -> Void) {
+        let alert: UIAlertController = .init(title: "Редактирование URL",
+                                             message: "Введите новый URL",
+                                             preferredStyle: .alert)
+        alert.addTextField { field in
+            field.placeholder = "Введите URL"
+            field.text = Constants.SiteLinks.siteMainPageURL
+        }
+        
+        let action: UIAlertAction = .init(title: "Готово", style: .default) { _ in
+            guard let fileds = alert.textFields else { return }
+            guard let text = fileds[0].text else { return }
+            print("🟡 ulr from textfield", text)
+            Constants.SiteLinks.siteMainPageURL = text
+            updateHandler()
+        }
+        
+        let cancelAction: UIAlertAction = .init(title: "Отмена", style: .cancel)
+        alert.addAction(action)
+        alert.addAction(cancelAction)
+        
+        alert.show()
     }
     
     static func noInternetAlert() {
@@ -32,14 +61,29 @@ class AlertManager {
         title: String,
         message: String,
         okButton: String? = nil,
-        okHandler: ((UIAlertAction) -> Void)? = nil
+        okHandler: ((UIAlertAction) -> Void)? = nil,
+        secondButton: UIAlertAction? = nil
     ) -> UIAlertController {
         let alertVC = UIAlertController(title: title,
                                         message: message,
                                         preferredStyle: .alert)
         let actionCanel = UIAlertAction(title: okButton ?? "OK", style: .cancel, handler: okHandler)
         alertVC.addAction(actionCanel)
+        if let secondButton = secondButton {
+            alertVC.addAction(secondButton)
+        }
         return alertVC
+    }
+    
+}
+
+extension AlertManager {
+    
+    static func addChangeMangaLinkAction(_ handler: @escaping () -> Void) -> UIAlertAction {
+        let action: UIAlertAction = .init(title: "Сменить ссылку", style: .default) { _ in
+            handler()
+        }
+        return action
     }
     
 }

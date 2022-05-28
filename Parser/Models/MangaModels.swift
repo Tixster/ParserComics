@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import ParserComics
 import UIKit
 
-struct MangaData {
-    let titles: [TitleModel]
+struct MangaData: MangaStorage {
+    let titles: [Title]
     let nextPage: URL
 }
 
@@ -18,7 +19,7 @@ struct Manga {
     var manga: [TitleModel]
 }
 
-struct TitleModel: Codable {
+struct TitleModel: Title {
     let title: String
     let cover: URL
     let description: String?

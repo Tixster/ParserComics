@@ -28,7 +28,15 @@ class MainParserPresenter: MainParserPresentationLogic {
                 mangaDataLists.removeAll()
             }
             let _ = mangaData.titles.map { manga in
-                mangaDataLists.append(manga)
+                let model: TitleModel = .init(title: manga.title,
+                                              cover: manga.cover,
+                                              description: manga.description,
+                                              author: manga.author,
+                                              link: manga.link,
+                                              likes: manga.likes,
+                                              views: manga.views,
+                                              pages: manga.pages)
+                mangaDataLists.append(model)
             }
             
             viewController?.displayData(viewModel: .displayMangaData(mangaDataLists))
